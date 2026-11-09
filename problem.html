@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>คลังโจทย์ | ST8 CP-Grader</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style> body { font-family: 'Kanit', sans-serif; background-color: #070913; color: #f3f4f6; } .glass-card { background: rgba(18, 22, 38, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); } </style>
+</head>
+<body class="min-h-screen flex flex-col relative overflow-x-hidden selection:bg-indigo-500 selection:text-white">
+
+  <header class="sticky top-0 z-40 glass-card border-b border-white/5 px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+      <div class="bg-gradient-to-tr from-indigo-600 to-violet-500 p-2.5 rounded-2xl text-white font-bold text-lg flex items-center justify-center w-10 h-10"><i class="fa-solid fa-code"></i></div>
+      <div><h1 class="font-bold text-base tracking-wide text-white">ST8 CP-Grader</h1><p class="text-[10px] text-indigo-300">Problem Bank</p></div>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="index.html" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-xl text-xs transition"><i class="fa-solid fa-house mr-1"></i> หน้าหลัก</a>
+      <a href="ranking.html" class="bg-indigo-600/20 text-indigo-300 hover:bg-indigo-600 hover:text-white px-4 py-2 rounded-xl text-xs transition"><i class="fa-solid fa-trophy mr-1"></i> บอร์ด Ranking</a>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-5xl mx-auto px-6 py-12 space-y-6 w-full">
+    <div class="flex justify-between items-center">
+      <div>
+        <h2 class="text-2xl font-bold text-white mb-1"><i class="fa-solid fa-book-open text-indigo-400 mr-2"></i> คลังโจทย์ทั้งหมด</h2>
+        <p class="text-xs text-gray-400">เลือกโจทย์ที่ผ่านการรับรองจาก Admin เพื่อเตรียมเขียนโค้ดและส่งตรวจ</p>
+      </div>
+    </div>
+
+    <div class="glass-card rounded-2xl overflow-hidden border border-white/10">
+      <table class="w-full text-left text-xs">
+        <thead class="bg-white/5 text-gray-400 border-b border-white/10">
+          <tr><th class="p-4">ID & ชื่อโจทย์</th><th class="p-4">ระดับความยาก</th><th class="p-4 text-right">ดำเนินการ</th></tr>
+        </thead>
+        <tbody id="verifiedProblemsTable" class="divide-y divide-white/5">
+          <tr><td colspan="3" class="p-4 text-center text-gray-400">กำลังตรวจสอบสิทธิ์...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer class="glass-card border-t border-white/5 py-6 text-center text-xs text-gray-400 mt-auto">
+    <p>ST8 CP-Grader &bull; Problem Bank</p>
+  </footer>
+
+  <script>
+    const SUPABASE_URL = 'https://hqnmfkafwwnjiqpdhzoh.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxbm1ma2Fmd3duamlxcGRoem9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQyMTc0NzEsImV4cCI6MjEwOTc5MzQ3MX0.m6dHtNnXuQ108DvafyKWeFvAg_oySuQH3LRg0Jzaops';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function checkAccess() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session) {
+        alert('⚠️ กรุณาเข้าสู่ระบบก่อนเข้าใช้งานคลังโจทย์');
+        window.location.href = 'index.html';
+        return;
+      }
+      fetchProblems();
+    }
+    checkAccess();
+
+    async function fetchProblems() {
+      const { data: probList } = await supabaseClient.from('problems').select('*').eq('is_verified', true);
+      const tableBody = document.getElementById('verifiedProblemsTable');
+      if (probList && probList.length > 0) {
+        tableBody.innerHTML = probList.map(p => `
+          <tr>
+            <td class="p-4 font-bold text-white">#PROB-${p.id} : ${p.title}</td>
+            <td class="p-4 text-emerald-400">${p.difficulty}</td>
+            <td class="p-4 text-right">
+              <button onclick="alert('เตรียมพบกับหน้า Code Editor ในขั้นตอนถัดไป')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3.5 py-1.5 rounded-xl transition">ทำโจทย์ข้อนี้</button>
+            </td>
+          </tr>
+        `).join('');
+      } else {
+        tableBody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-gray-400">ยังไม่มีโจทย์ที่ผ่านการรับรองในขณะนี้</td></tr>`;
+      }
+    }
+  </script>
+</body>
+</html>
