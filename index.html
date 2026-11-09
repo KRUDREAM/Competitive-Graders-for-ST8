@@ -272,6 +272,7 @@
   </footer>
 
   <!-- SCRIPT CONTROLLER -->
+ <!-- SCRIPT CONTROLLER -->
   <script>
     const SUPABASE_URL = 'https://hqnmfkafwwnjiqpdhzoh.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxbm1ma2Fmd3duamlxcGRoem9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQyMTc0NzEsImV4cCI6MjEwOTc5MzQ3MX0.m6dHtNnXuQ108DvafyKWeFvAg_oySuQH3LRg0Jzaops';
@@ -279,15 +280,28 @@
 
     let currentUser = null;
 
-    // ตรวจสอบสถานะ Session ปัจจุบัน
-    async function checkUserSession() {
+    // --- ตรวจสอบสถานะ Session และดักจับ Token จากลิงก์อีเมลยืนยันทันทีที่เปิดเว็บ ---
+    async function initAuthSession() {
+      // ตรวจสอบว่ามี Token ส่งมากับ URL หลังกดลิงก์อีเมลไหม
+      const hash = window.location.hash;
+      if (hash && hash.includes('access_token')) {
+        // ให้ Supabase จัดการเคลียร์และเก็บบันทึก Session จาก URL ทันที
+        const { data, error } = await supabaseClient.auth.getSession();
+        if (!error && data.session) {
+          alert('✅ ยืนยันอีเมลและเปิดใช้งานบัญชี (Activate) สำเร็จเรียบร้อย!');
+          // ล้าง URL hash ให้สะอาด
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+      }
+
+      // เช็ค Session ปกติ
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (session && session.user) {
         currentUser = session.user;
         updateNavbarLoggedIn(currentUser.email);
       }
     }
-    checkUserSession();
+    initAuthSession();
 
     function updateNavbarLoggedIn(identifier) {
       document.getElementById('authNavArea').innerHTML = `
@@ -305,7 +319,6 @@
       window.location.reload();
     }
 
-    // ฟังก์ชันเช็ค Auth ก่อนให้เข้าหน้าคลังโจทย์
     async function checkAuthAndRedirect() {
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (!session) {
@@ -325,7 +338,6 @@
         if (totalCount !== null) document.getElementById('statTotal').textContent = totalCount;
         if (verifiedCount !== null) document.getElementById('statVerified').textContent = verifiedCount;
 
-        // ดึงรายการโจทย์ Verified
         const { data: probList } = await supabaseClient.from('problems').select('*').eq('is_verified', true);
         const tableBody = document.getElementById('verifiedProblemsTable');
         if (probList && probList.length > 0) {
@@ -342,7 +354,6 @@
           tableBody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-gray-400">ยังไม่มีโจทย์ที่ผ่านการรับรองจาก Admin ในขณะนี้</td></tr>`;
         }
 
-        // ดึง Ranking จากตาราง profiles
         const { data: rankingList } = await supabaseClient.from('profiles').select('*').order('xp', { ascending: false }).limit(5);
         const rankingBody = document.getElementById('rankingTableBody');
         if (rankingList && rankingList.length > 0) {
@@ -357,7 +368,6 @@
           rankingBody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-gray-400">ยังไม่มีข้อมูลผู้ใช้งานในระบบ Ranking</td></tr>`;
         }
 
-        // ดึง Contest จริง
         const { data: contestList } = await supabaseClient.from('contests').select('*').order('created_at', { ascending: false });
         const bannerContainer = document.getElementById('contestBannerContainer');
         if (contestList && contestList.length > 0) {
@@ -381,7 +391,6 @@
     }
     fetchRealData();
 
-    // View Switching
     function switchView(viewName) {
       document.getElementById('view-landing').classList.add('hidden');
       document.getElementById('view-dashboard').classList.add('hidden');
@@ -389,7 +398,6 @@
       if (viewName === 'dashboard') document.getElementById('view-dashboard').classList.remove('hidden');
     }
 
-    // Modal Control (Login / Register / Change Password)
     let currentAuthMode = 'login';
     const modal = document.getElementById('authModal');
     const container = document.getElementById('modalContainer');
@@ -445,7 +453,6 @@
       }
     }
 
-    // Auth Submission Handling
     const authForm = document.getElementById('authForm');
     const authMsg = document.getElementById('authMessage');
 
@@ -495,7 +502,6 @@
             authMsg.className = 'text-xs text-center text-rose-400 font-semibold';
             return;
           }
-          // กรณีค้นหาด้วย username สมมติดึงอีเมล หรือให้ผู้ใช้กรอกอีเมลตรงๆ
         }
 
         const { data, error } = await supabaseClient.auth.signInWithPassword({ email: emailToLogin, password: password });
