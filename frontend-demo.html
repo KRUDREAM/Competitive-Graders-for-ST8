@@ -1,25 +1,231 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <title>Mini C++ Grader</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ST8 Online Judge & LMS Grader</title>
+    <!-- Google Font: Kanit -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; margin: 40px; background: #f4f7f6; }
-        .container { background: white; padding: 20px; border-radius: 8px; max-width: 800px; margin: auto; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        textarea { width: 100%; height: 250px; font-family: monospace; padding: 10px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; }
-        button { background: #007bff; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; margin-top: 10px; }
-        button:hover { background: #0056b3; }
-        #result { margin-top: 20px; padding: 15px; border-radius: 4px; background: #e9ecef; white-space: pre-wrap; font-family: monospace; }
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --border: #334155;
+            --code-bg: #090d16;
+        }
+
+        [data-theme="light"] {
+            --bg-main: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --border: #e2e8f0;
+            --code-bg: #1e293b;
+        }
+
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .app-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Navbar Layer */
+        navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-card);
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            font-weight: 600;
+            font-size: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theme-toggle {
+            background: var(--border);
+            border: none;
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Kanit', sans-serif;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .theme-toggle:hover {
+            opacity: 0.8;
+        }
+
+        /* Main Grid Layout */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-layout { grid-template-columns: 1fr; }
+        }
+
+        /* Card Layers */
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+        }
+
+        h3 { margin-top: 0; color: var(--primary); font-weight: 600; }
+
+        .problem-meta {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .badge {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .problem-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* Editor Section */
+        .editor-container {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 320px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            padding: 15px;
+            font-size: 13px;
+            background-color: var(--code-bg);
+            color: #38bdf8;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+
+        .btn-submit {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-family: 'Kanit', sans-serif;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.99);
+        }
+
+        /* Result Panel */
+        .result-box {
+            background: var(--code-bg);
+            color: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            min-height: 120px;
+            border: 1px solid var(--border);
+        }
+
+        .status-ac { color: #22c55e; font-weight: bold; }
+        .status-wa { color: #ef4444; font-weight: bold; }
+        .status-err { color: #f59e0b; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>💻 ส่งโค้ดตรวจ (Problem: A + B / Sum Numbers)</h2>
-    <p>โจทย์: จงรับเลขจำนวนเต็ม 2 ตัวแล้วแสดงผลบวก</p>
-    
-    <label>C++ Source Code:</label><br>
-    <textarea id="code">#include <iostream>
+<div class="app-container">
+    <!-- Navbar Layer -->
+    <navbar>
+        <div class="logo">
+            🎓 ST8 Competitive Grader LMS
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()">🌓 สลับธีม (Theme)</button>
+    </navbar>
+
+    <!-- Content Grid -->
+    <div class="grid-layout">
+        <!-- ฝั่งซ้าย: รายละเอียดโจทย์ -->
+        <div class="card">
+            <h3>📖 ข้อที่ 1: Sum Numbers (A + B)</h3>
+            <div class="problem-meta">
+                <span class="badge">Time Limit: 1.0s</span>
+                <span class="badge">Memory Limit: 256 MB</span>
+                <span class="badge">Difficulty: ง่าย</span>
+            </div>
+            <div class="problem-desc">
+                <strong>คำสั่ง:</strong> จงเขียนโปรแกรมรับค่าจำนวนเต็ม 2 ตัว ($a$ และ $b$) คั่นด้วยช่องว่าง แล้วแสดงผลลัพธ์ที่เป็นผลบวก ($a + b$) ออกทางหน้าจอ
+                <br><br>
+                <strong>ตัวอย่าง Input:</strong><br>
+                <code>5 10</code><br><br>
+                <strong>ตัวอย่าง Output:</strong><br>
+                <code>15</code>
+            </div>
+        </div>
+
+        <!-- ฝั่งขวา: IDE เขียนโค้ด & ผลตรวจ -->
+        <div class="card">
+            <h3>💻 Code Editor (C++)</h3>
+            <div class="editor-container">
+                <textarea id="code">#include <iostream>
 using namespace std;
 
 int main() {
@@ -28,38 +234,22 @@ int main() {
         cout << a + b << endl;
     }
     return 0;
-}</textarea><br>
+}</textarea>
+            </div>
+            <button class="btn-submit" onclick="submitCode()">🚀 ส่งตรวจ (Submit Code)</button>
 
-    <button onclick="submitCode()">🚀 ส่งตรวจ (Submit)</button>
-
-    <h3>ผลการตรวจ (Verdict):</h3>
-    <div id="result">ยังไม่มีการส่งโค้ด</div>
+            <div style="margin-top: 20px;">
+                <label>📋 ผลการตรวจ (Evaluation Result):</label>
+                <div id="result" class="result-box">ยังไม่มีการส่งโค้ด...</div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-async function submitCode() {
-    const code = document.getElementById('code').value;
-    const resultDiv = document.getElementById('result');
-    
-    resultDiv.innerText = "⏳ กำลังคอมไพล์และตรวจโค้ด...";
-
-    try {
-        const response = await fetch('http://localhost:8000/submit', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                source_code: code,
-                language: "cpp"
-            })
-        });
-
-        const data = await response.json();
-        resultDiv.innerText = JSON.stringify(data, null, 2);
-    } catch (error) {
-        resultDiv.innerText = "❌ เกิดข้อผิดพลาดในการเชื่อมต่อกับ Backend: " + error;
-    }
-}
-</script>
-
-</body>
-</html>
+    // ระบบสลับ Theme มืด / สว่าง
+    function toggleTheme() {
+        const html = document.documentElement;
+        const currentTheme = html.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', newTheme)};

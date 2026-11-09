@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern Web App UI</title>
+  <style>
+    /* รีเซ็ตค่าพื้นฐานและทำพื้นหลังให้ดูมีมิติ */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1f1c2c, #928dab);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #ffffff;
+    }
+
+    /* ดีไซน์หน้าต่างแอปพลิเคชันแบบกระจกฝ้า (Glassmorphism Window) */
+    .app-window {
+      background: rgba(18, 18, 24, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+      width: 100%;
+      max-width: 650px;
+    }
+
+    /* ส่วนหัวของหน้าต่าง (Window Header) */
+    .window-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* ปุ่มควบคุมหน้าต่างสไตล์ macOS (Close, Minimize, Expand) */
+    .window-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .control-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .dot-close { background-color: #ff5f56; }
+    .dot-minimize { background-color: #ffbd2e; }
+    .dot-expand { background-color: #27c93f; }
+
+    .window-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* ส่วนเนื้อหาภายในแอปพลิเคชัน */
+    .window-body {
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .window-body h1 {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .window-body p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.5;
+    }
+
+    /* กลุ่มปุ่มกดสไตล์โมเดิร์น */
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .app-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .app-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .app-button.primary {
+      background: rgba(99, 102, 241, 0.4);
+      border-color: rgba(99, 102, 241, 0.6);
+    }
+
+    .app-button.primary:hover {
+      background: rgba(99, 102, 241, 0.6);
+      border-color: rgba(99, 102, 241, 0.8);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- หน้าต่างแอปพลิเคชัน -->
+  <div class="app-window">
+    <div class="window-header">
+      <div class="window-controls">
+        <div class="control-dot dot-close"></div>
+        <div class="control-dot dot-minimize"></div>
+        <div class="control-dot dot-expand"></div>
+      </div>
+      <div class="window-title">Dashboard - Web App</div>
+      <div style="width: 44px;"></div> <!-- จัดหน้าตาให้หัวข้ออยู่ตรงกลางพอดี -->
+    </div>
+
+    <div class="window-body">
+      <h1>ยินดีต้อนรับสู่ระบบเดสก์ท็อปจำลอง</h1>
+      <p>นี่คือตัวอย่างโครงสร้างหน้าตาเว็บแอปพลิเคชันที่ตกแต่งด้วยสไตล์ Glassmorphism และปุ่มกดแบบโปร่งแสงทันสมัย คุณสามารถนำโค้ดชุดนี้ไปปรับใช้หรือต่อยอดกับโปรเจกต์ของคุณได้ทันทีครับ</p>
+      
+      <div class="button-group">
+        <button class="app-button primary">🚀 เริ่มต้นใช้งาน</button>
+        <button class="app-button">⚙️ ตั้งค่าระบบ</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
