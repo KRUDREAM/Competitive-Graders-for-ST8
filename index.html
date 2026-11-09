@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ST8 CP-Grader | แพลตฟอร์มประลองโค้ดและพัฒนาอัลกอริทึม</title>
+  <title>ST8 CP-Grader | แพลตฟอร์มประลองโค้ดและพัฒนาอัลกอริทึมระดับพรีเมียม</title>
   <!-- Google Fonts: Kanit -->
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- Tailwind CSS CDN -->
@@ -15,179 +15,225 @@
   <style>
     body {
       font-family: 'Kanit', sans-serif;
-      background-color: #0b0f19;
+      background-color: #070913;
       color: #f3f4f6;
     }
     .glass-card {
-      background: rgba(17, 24, 39, 0.7);
-      backdrop-filter: blur(16px);
+      background: rgba(18, 22, 38, 0.65);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
     }
-    .hero-glow {
-      position: absolute;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
-      pointer-events: none;
+    .glass-modal {
+      background: rgba(13, 17, 30, 0.85);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+    }
+    /* Soft Pulsing / Glowing Background Orbs */
+    @keyframes softGlow {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.08); }
+    }
+    @keyframes subtleBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .orb-1 {
+      animation: softGlow 8s ease-in-out infinite;
+    }
+    .orb-2 {
+      animation: softGlow 10s ease-in-out infinite 2s;
+    }
+    .badge-blink {
+      animation: subtleBlink 3s ease-in-out infinite;
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col relative overflow-x-hidden">
+<body class="min-h-screen flex flex-col relative overflow-x-hidden selection:bg-indigo-500 selection:text-white">
 
-  <!-- Background Decorative Glow -->
-  <div class="hero-glow -top-32 -left-32 rounded-full"></div>
-  <div class="hero-glow top-1/3 -right-32 rounded-full"></div>
+  <!-- Background Animated Gradient Orbs (Soft Glow) -->
+  <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-indigo-600/15 rounded-full blur-[120px] pointer-events-none orb-1"></div>
+  <div class="absolute top-1/3 right-1/4 w-[450px] h-[450px] bg-purple-600/15 rounded-full blur-[120px] pointer-events-none orb-2"></div>
 
   <!-- NAVIGATION BAR -->
-  <header class="sticky top-0 z-50 glass-card border-b border-gray-800 px-6 py-4 flex items-center justify-between">
+  <header class="sticky top-0 z-40 glass-card border-b border-white/5 px-6 py-4 flex items-center justify-between">
     <div class="flex items-center gap-3">
-      <div class="bg-indigo-600 p-2.5 rounded-xl shadow-lg shadow-indigo-500/30 text-white font-bold text-lg flex items-center justify-center w-10 h-10">
+      <div class="bg-gradient-to-tr from-indigo-600 to-violet-500 p-2.5 rounded-2xl shadow-lg shadow-indigo-500/25 text-white font-bold text-lg flex items-center justify-center w-10 h-10">
         <i class="fa-solid fa-code"></i>
       </div>
       <div>
         <h1 class="font-bold text-base tracking-wide text-white">ST8 CP-Grader</h1>
-        <p class="text-[10px] text-gray-400">Competitive Programming Platform</p>
+        <p class="text-[10px] text-indigo-300/80 font-medium">Competitive Programming Platform</p>
       </div>
     </div>
 
-    <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-300">
+    <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
       <a href="#about" class="hover:text-indigo-400 transition">วัตถุประสงค์</a>
       <a href="#features" class="hover:text-indigo-400 transition">ฟีเจอร์เด่น</a>
       <a href="#stats" class="hover:text-indigo-400 transition">สถิติระบบ</a>
-      <a href="#register" class="hover:text-indigo-400 transition">สมัครสมาชิก</a>
     </nav>
 
     <div class="flex items-center gap-3">
-      <a href="#register" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-lg shadow-indigo-600/30 transition">
-        <i class="fa-solid fa-user-plus mr-1"></i> เริ่มต้นใช้งาน
-      </a>
+      <button onclick="toggleModal(true)" class="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white px-5 py-2.5 rounded-xl text-xs font-semibold shadow-lg shadow-indigo-600/30 transition transform hover:-translate-y-0.5">
+        <i class="fa-solid fa-user-plus mr-1.5"></i> สมัครสมาชิก
+      </button>
     </div>
   </header>
 
-  <!-- HERO SECTION: Objective & Introduction -->
-  <section id="about" class="max-w-6xl mx-auto px-6 pt-16 pb-12 text-center relative z-10">
-    <div class="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 px-3.5 py-1.5 rounded-full text-xs font-semibold mb-6">
-      <i class="fa-solid fa-sparkles"></i> แพลตฟอร์มฝึกเขียนโค้ดและประลองอัลกอริทึมสำหรับนักเรียน
+  <!-- HERO SECTION -->
+  <section id="about" class="max-w-5xl mx-auto px-6 pt-20 pb-16 text-center relative z-10">
+    <div class="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/25 text-indigo-300 px-4 py-1.5 rounded-full text-xs font-semibold mb-6 shadow-sm">
+      <span class="w-2 h-2 rounded-full bg-indigo-400 badge-blink"></span> แพลตฟอร์มฝึกเขียนโค้ดและประลองอัลกอริทึม
     </div>
-    <h2 class="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-6">
-      ยกระดับทักษะการเขียนโปรแกรม <br class="hidden md:block">ด้วยระบบ <span class="text-indigo-400">Competitive Programming</span> ที่แท้จริง
+    
+    <h2 class="text-3xl md:text-6xl font-extrabold text-white tracking-tight leading-tight mb-6">
+      ยกระดับทักษะการเขียนโปรแกรม <br class="hidden md:block">ด้วยระบบ <span class="bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">Competitive Programming</span>
     </h2>
-    <p class="text-gray-400 text-sm md:text-base max-w-2xl mx-auto mb-8 leading-relaxed">
-      <strong>ST8 CP-Grader</strong> ถูกสร้างขึ้นมาเพื่อให้พื้นที่สำหรับนักเรียนและผู้ที่สนใจ ได้ฝึกฝนการเขียนโค้ดภาษา C และ C++ ตรวจสอบผลลัพธ์อัตโนมัติแบบ Realtime พร้อมระบบสร้างโจทย์อิสระ เควสต์รายสัปดาห์ และคอมมูนิตี้แลกเปลี่ยนความรู้ เพื่อเตรียมพร้อมสู่การแข่งขันระดับสูง
+    
+    <p class="text-gray-400 text-sm md:text-base max-w-2xl mx-auto mb-10 leading-relaxed font-light">
+      <strong>ST8 CP-Grader</strong> พื้นที่สำหรับนักเรียนและผู้ที่สนใจฝึกฝนการเขียนโค้ดภาษา C และ C++ ตรวจสอบผลลัพธ์อัตโนมัติแบบ Realtime พร้อมระบบสร้างโจทย์อิสระ เควสต์รายสัปดาห์ และคอมมูนิตี้แลกเปลี่ยนความรู้
     </p>
+
     <div class="flex flex-wrap justify-center gap-4">
-      <a href="#register" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-2xl text-sm font-bold shadow-xl shadow-indigo-600/30 transition flex items-center gap-2">
-        <i class="fa-solid fa-rocket"></i> สมัครสมาชิกฟรีทันที
-      </a>
-      <a href="#features" class="bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 px-6 py-3 rounded-2xl text-sm font-semibold transition flex items-center gap-2">
-        <i class="fa-solid id-card fa-compass"></i> ดูฟีเจอร์ทั้งหมด
+      <button onclick="toggleModal(true)" class="bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 hover:opacity-95 text-white px-8 py-3.5 rounded-2xl text-sm font-bold shadow-2xl shadow-indigo-600/40 transition transform hover:-translate-y-0.5 flex items-center gap-2.5">
+        <i class="fa-solid fa-rocket"></i> เริ่มต้นใช้งานฟรีทันที
+      </button>
+      <a href="#features" class="glass-card hover:bg-white/5 text-gray-200 border border-white/10 px-8 py-3.5 rounded-2xl text-sm font-semibold transition flex items-center gap-2.5">
+        <i class="fa-solid fa-compass text-indigo-400"></i> สำรวจฟีเจอร์
       </a>
     </div>
   </section>
 
-  <!-- INTERESTING STATS BANNER -->
-  <section id="stats" class="max-w-6xl mx-auto px-6 py-8 w-full">
-    <div class="glass-card rounded-3xl p-6 md:p-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+  <!-- STATS BANNER -->
+  <section id="stats" class="max-w-5xl mx-auto px-6 py-8 w-full relative z-10">
+    <div class="glass-card rounded-3xl p-6 md:p-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center border border-white/10">
       <div>
-        <div class="text-2xl md:text-4xl font-extrabold text-indigo-400 mb-1">C / C++</div>
-        <div class="text-xs text-gray-400">รองรับคอมไพเลอร์มาตรฐาน</div>
+        <div class="text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent mb-1">C / C++</div>
+        <div class="text-xs text-gray-400 font-medium">รองรับมาตรฐาน GCC</div>
       </div>
       <div>
-        <div class="text-2xl md:text-4xl font-extrabold text-emerald-400 mb-1">100%</div>
-        <div class="text-xs text-gray-400">ตรวจผลลัพธ์อัตโนมัติแบบ Realtime</div>
+        <div class="text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent mb-1">100%</div>
+        <div class="text-xs text-gray-400 font-medium">ตรวจผลลัพธ์แบบ Realtime</div>
       </div>
       <div>
-        <div class="text-2xl md:text-4xl font-extrabold text-amber-400 mb-1">Weekly</div>
-        <div class="text-xs text-gray-400">ภารกิจและเควสต์สะสมแต้ม XP</div>
+        <div class="text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent mb-1">Weekly</div>
+        <div class="text-xs text-gray-400 font-medium">เควสต์และ XP สะสม</div>
       </div>
       <div>
-        <div class="text-2xl md:text-4xl font-extrabold text-purple-400 mb-1">Community</div>
-        <div class="text-xs text-gray-400">ระบบตั้งโจทย์และถาม-ตอบอิสระ</div>
+        <div class="text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-1">Community</div>
+        <div class="text-xs text-gray-400 font-medium">ตั้งโจทย์และถามตอบอิสระ</div>
       </div>
     </div>
   </section>
 
-  <!-- FEATURES GRID SECTION -->
-  <section id="features" class="max-w-6xl mx-auto px-6 py-12">
-    <div class="text-center mb-10">
-      <h3 class="text-xl md:text-2xl font-bold text-white mb-2">จุดเด่นและฟีเจอร์ภายในระบบ</h3>
-      <p class="text-xs text-gray-400">ออกแบบมาเพื่อให้การฝึกโค้ดเป็นเรื่องสนุกและท้าทาย</p>
+  <!-- FEATURES GRID -->
+  <section id="features" class="max-w-5xl mx-auto px-6 py-16 relative z-10">
+    <div class="text-center mb-12">
+      <h3 class="text-2xl md:text-3xl font-bold text-white mb-2">จุดเด่นและฟีเจอร์ภายในระบบ</h3>
+      <p class="text-xs md:text-sm text-gray-400">ออกแบบมาเพื่อให้การฝึกโค้ดเป็นเรื่องสนุก ตื่นเต้น และท้าทาย</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="glass-card rounded-2xl p-6 border border-gray-800">
-        <div class="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-lg font-bold mb-4">
+      <div class="glass-card rounded-3xl p-7 border border-white/10 hover:border-indigo-500/40 transition group">
+        <div class="w-12 h-12 rounded-2xl bg-indigo-500/15 text-indigo-400 flex items-center justify-center text-lg font-bold mb-5 group-hover:scale-110 transition">
           <i class="fa-solid fa-bolt"></i>
         </div>
-        <h4 class="font-bold text-sm text-white mb-2">Instant C/C++ Grader</h4>
-        <p class="text-xs text-gray-400 leading-relaxed">เขียนโค้ดภาษา C หรือ C++ ในระบบแล้วกดส่งตรวจได้ทันที พร้อมแสดงผลลัพธ์ Test Case และเวลาที่ใช้ประมวลผลอย่างแม่นยำ</p>
+        <h4 class="font-bold text-base text-white mb-2">Instant C/C++ Grader</h4>
+        <p class="text-xs text-gray-400 leading-relaxed">เขียนโค้ดภาษา C หรือ C++ ในระบบแล้วกดส่งตรวจได้ทันที พร้อมแสดงผล Test Case และเวลาประมวลผลอย่างแม่นยำ</p>
       </div>
 
-      <div class="glass-card rounded-2xl p-6 border border-gray-800">
-        <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg font-bold mb-4">
+      <div class="glass-card rounded-3xl p-7 border border-white/10 hover:border-emerald-500/40 transition group">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center text-lg font-bold mb-5 group-hover:scale-110 transition">
           <i class="fa-solid fa-users-gear"></i>
         </div>
-        <h4 class="font-bold text-sm text-white mb-2">User-Generated Problems</h4>
-        <p class="text-xs text-gray-400 leading-relaxed">ทุกคนสามารถออกแบบและอัปโหลดโจทย์เข้ามาในระบบได้ โดยจะผ่านการตรวจสอบ (Verify) จาก Admin ก่อนเปิดให้เพื่อนๆ เข้ามาทำ</p>
+        <h4 class="font-bold text-base text-white mb-2">User-Generated Problems</h4>
+        <p class="text-xs text-gray-400 leading-relaxed">ทุกคนสามารถออกแบบและอัปโหลดโจทย์เข้ามาได้ โดยจะผ่านการตรวจสอบ (Verify) จาก Admin ก่อนเปิดให้เพื่อนๆ เข้ามาทำ</p>
       </div>
 
-      <div class="glass-card rounded-2xl p-6 border border-gray-800">
-        <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg font-bold mb-4">
+      <div class="glass-card rounded-3xl p-7 border border-white/10 hover:border-amber-500/40 transition group">
+        <div class="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-400 flex items-center justify-center text-lg font-bold mb-5 group-hover:scale-110 transition">
           <i class="fa-solid fa-trophy"></i>
         </div>
-        <h4 class="font-bold text-sm text-white mb-2">Realtime Ranking & Quests</h4>
+        <h4 class="font-bold text-base text-white mb-2">Realtime Ranking & Quests</h4>
         <p class="text-xs text-gray-400 leading-relaxed">สะสมแต้ม XP จากเควสต์รายวันและ Weekly Task พร้อมจัดอันดับบอร์ดคะแนนแบบเรียลไทม์เพื่อชิงความเป็นหนึ่ง</p>
       </div>
     </div>
   </section>
 
-  <!-- SUPABASE REGISTRATION SECTION -->
-  <section id="register" class="max-w-2xl mx-auto px-6 py-12 w-full">
-    <div class="glass-card rounded-3xl p-8 border border-indigo-500/30 shadow-2xl relative overflow-hidden">
-      <div class="absolute top-0 right-0 bg-indigo-600 text-white text-[10px] font-bold px-4 py-1 rounded-bl-xl uppercase tracking-wider">
-        Supabase Backend Connected
-      </div>
+  <!-- SIGNUP POPUP MODAL -->
+  <div id="signupModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/70 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+    <div class="glass-modal rounded-3xl p-8 max-w-md w-full relative transform scale-95 transition-all duration-300 border border-white/15" id="modalContainer">
       
+      <!-- Close Button -->
+      <button onclick="toggleModal(false)" class="absolute top-5 right-5 text-gray-400 hover:text-white w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+
       <div class="text-center mb-6">
-        <h3 class="text-xl font-bold text-white mb-1"><i class="fa-solid fa-user-shield text-indigo-400 mr-2"></i> สมัครสมาชิกเข้าสู่ระบบ</h3>
-        <p class="text-xs text-gray-400">สร้างบัญชีผู้ใช้เพื่อบันทึกคะแนน ประวัติการส่งโค้ด และร่วมประลองอันดับ</p>
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white flex items-center justify-center text-lg mx-auto mb-3 shadow-lg shadow-indigo-500/30">
+          <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-1">สมัครสมาชิกเข้าสู่ระบบ</h3>
+        <p class="text-xs text-gray-400">สร้างบัญชีเพื่อบันทึกคะแนน ประวัติการส่งโค้ด และร่วมประลองอันดับ</p>
       </div>
 
       <form id="signupForm" class="space-y-4">
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1.5">ชื่อผู้ใช้งาน / ชื่อเล่น (Display Name)</label>
-          <input type="text" id="displayName" required placeholder="เช่น Angpao" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500 transition">
+          <input type="text" id="displayName" required placeholder="เช่น Angpao" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-indigo-500 transition">
         </div>
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1.5">อีเมล (Email)</label>
-          <input type="email" id="email" required placeholder="name@example.com" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500 transition">
+          <input type="email" id="email" required placeholder="name@example.com" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-indigo-500 transition">
         </div>
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1.5">รหัสผ่าน (Password)</label>
-          <input type="password" id="password" required placeholder="••••••••" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500 transition">
+          <input type="password" id="password" required placeholder="••••••••" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-indigo-500 transition">
         </div>
 
         <div id="formMessage" class="text-xs text-center hidden"></div>
 
-        <button type="submit" id="submitBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl text-xs transition shadow-lg shadow-indigo-600/30">
+        <button type="submit" id="submitBtn" class="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:opacity-95 text-white font-bold py-3.5 rounded-xl text-xs transition shadow-lg shadow-indigo-600/30 mt-2">
           ลงทะเบียนใช้งานระบบ
         </button>
       </form>
     </div>
-  </section>
+  </div>
 
   <!-- FOOTER -->
-  <footer class="glass-card border-t border-gray-800 py-6 text-center text-xs text-gray-500 mt-auto">
+  <footer class="glass-card border-t border-white/5 py-6 text-center text-xs text-gray-500 mt-auto relative z-10">
     <p>ST8 Competitive Programming Grader System &bull; พัฒนาขึ้นเพื่อเหล่านักเรียนผู้รักการเขียนโค้ดภาษา C และ C++</p>
   </footer>
 
-  <!-- SUPABASE INITIALIZATION & SCRIPT -->
+  <!-- SCRIPT FOR MODAL & SUPABASE -->
   <script>
-    // ตั้งค่าเชื่อมต่อ Supabase (แทนที่ด้วย Project URL และ Anon Key ของคุณ)
+    const modal = document.getElementById('signupModal');
+    const container = document.getElementById('modalContainer');
+
+    function toggleModal(show) {
+      if (show) {
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        container.classList.remove('scale-95');
+        container.classList.add('scale-100');
+      } else {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        container.classList.remove('scale-100');
+        container.classList.add('scale-95');
+      }
+    }
+
+    // ปิด Modal เมื่อคลิกพื้นที่ว่างด้านนอก
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) toggleModal(false);
+    });
+
+    // Supabase Setup
     const SUPABASE_URL = 'YOUR_SUPABASE_URL';
     const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
     
-    // ตรวจสอบว่าใส่ค่าหรือยัง ถ้ายังให้จำลองการทำงานไว้ก่อน
     let supabaseClient = null;
     if (SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
       supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -207,7 +253,6 @@
       btn.textContent = 'กำลังบันทึกข้อมูล...';
 
       if (!supabaseClient) {
-        // กรณีที่ยังไม่ได้ตั้งค่าคีย์จริง ให้แสดงตัวอย่างจำลองความสำเร็จ
         setTimeout(() => {
           msg.textContent = `✅ สมัครสมาชิกสำเร็จ (โหมดจำลอง): ยินดีต้อนรับคุณ ${displayName}!`;
           msg.className = 'text-xs text-center text-emerald-400 font-semibold';
@@ -218,14 +263,11 @@
         return;
       }
 
-      // โค้ดจริงเมื่อเชื่อมต่อ Supabase Auth
       try {
         const { data, error } = await supabaseClient.auth.signUp({
           email: email,
           password: password,
-          options: {
-            data: { display_name: displayName }
-          }
+          options: { data: { display_name: displayName } }
         });
 
         if (error) throw error;
@@ -242,7 +284,6 @@
       }
     });
   </script>
-
 
 </body>
 </html>
