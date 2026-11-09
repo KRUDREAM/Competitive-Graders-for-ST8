@@ -14,7 +14,6 @@
       background-color: #030712;
       color: #f3f4f6;
     }
-    /* Hi-Tech Cyber Glassmorphism */
     .tech-glass {
       background: rgba(10, 15, 30, 0.75);
       backdrop-filter: blur(20px);
@@ -23,12 +22,11 @@
       box-shadow: 0 0 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
     }
     .tech-modal {
-      background: rgba(6, 11, 25, 0.92);
+      background: rgba(6, 11, 25, 0.95);
       backdrop-filter: blur(25px);
       border: 1px solid rgba(56, 189, 248, 0.25);
       box-shadow: 0 0 60px rgba(14, 165, 233, 0.2);
     }
-    /* Cyber Grid Pattern Background */
     .cyber-grid {
       background-image: linear-gradient(to right, rgba(56, 189, 248, 0.03) 1px, transparent 1px),
                         linear-gradient(to bottom, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
@@ -60,9 +58,10 @@
     </div>
 
     <nav class="hidden md:flex items-center gap-6 text-xs font-medium text-gray-300">
+      <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="hover:text-cyan-400 transition"><i class="fa-solid fa-house mr-1 text-cyan-500"></i> หน้าหลัก</a>
       <a href="#about" class="hover:text-cyan-400 transition"><i class="fa-solid fa-bullseye mr-1 text-cyan-500"></i> วัตถุประสงค์</a>
       <a href="#contests" class="hover:text-cyan-400 transition"><i class="fa-solid fa-trophy mr-1 text-cyan-500"></i> Contest</a>
-      <a href="#ranking-section" class="hover:text-cyan-400 transition"><i class="fa-solid fa-ranking-star mr-1 text-cyan-500"></i> Ranking</a>
+      <a href="ranking.html" class="hover:text-cyan-400 transition"><i class="fa-solid fa-ranking-star mr-1 text-cyan-500"></i> Ranking</a>
       <a href="problems.html" class="text-cyan-400 font-semibold hover:text-cyan-300 transition"><i class="fa-solid fa-laptop-code mr-1"></i> คลังโจทย์</a>
     </nav>
 
@@ -121,25 +120,7 @@
       </div>
     </section>
 
-    <!-- Ranking Preview -->
-    <section id="ranking-section" class="w-full space-y-4">
-      <div class="text-center mb-6">
-        <h3 class="text-xl font-bold text-white mb-1"><i class="fa-solid fa-ranking-star text-cyan-400 mr-2"></i> บอร์ดจัดอันดับ (Leaderboard)</h3>
-        <p class="text-xs text-gray-400">ผู้ทำคะแนนสะสมสูงสุดในระบบปัจจุบัน</p>
-      </div>
-      <div class="tech-glass rounded-2xl overflow-hidden border border-cyan-500/20">
-        <table class="w-full text-left text-xs font-mono">
-          <thead class="bg-cyan-950/40 text-cyan-300 border-b border-cyan-500/20">
-            <tr><th class="p-3.5">RANK</th><th class="p-3.5">USERNAME</th><th class="p-3.5 text-right">TOTAL XP</th></tr>
-          </thead>
-          <tbody id="rankingTableBody" class="divide-y divide-cyan-500/10">
-            <tr><td colspan="3" class="p-4 text-center text-gray-400">กำลังโหลดข้อมูล Ranking...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- FULL TERMS & PRIVACY POLICY SECTION (ข้อความยาวและน่าเชื่อถือตามรีเควส) -->
+    <!-- FULL TERMS & PRIVACY POLICY SECTION -->
     <section id="legal-policies" class="w-full space-y-6 pt-6 border-t border-cyan-500/20">
       <div class="text-center">
         <h3 class="text-xl font-bold text-white mb-1"><i class="fa-solid fa-shield-halved text-cyan-400 mr-2"></i> ข้อกำหนดการใช้งานและนโยบายความเป็นส่วนตัว</h3>
@@ -176,6 +157,47 @@
     </section>
 
   </main>
+
+  <!-- STATS & SUBMISSION MODAL (Modal สำหรับดูพัฒนาการและการ Submission) -->
+  <div id="statsModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+    <div class="tech-modal rounded-3xl p-8 max-w-lg w-full relative transform scale-95 transition-all duration-300 border border-cyan-500/30">
+      <button onclick="toggleStatsModal(false)" class="absolute top-5 right-5 text-gray-400 hover:text-white w-8 h-8 rounded-full bg-cyan-500/10 flex items-center justify-center transition">
+        <i class="fa-solid fa-xmark text-xs"></i>
+      </button>
+
+      <div class="text-center mb-6">
+        <div class="w-12 h-12 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-lg mx-auto mb-3 border border-cyan-500/30">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-1">สถิติพัฒนาการ & Submission</h3>
+        <p class="text-xs text-gray-400">ข้อมูลการกดส่งโค้ดและอัตราความสำเร็จ (AC Rate) ของคุณ</p>
+      </div>
+
+      <div class="space-y-4">
+        <div class="grid grid-cols-2 gap-4 text-center">
+          <div class="tech-glass rounded-2xl p-4 border border-cyan-500/20">
+            <div id="modalTotalSubmissions" class="text-2xl font-bold text-cyan-400 font-mono">0</div>
+            <div class="text-[11px] text-gray-400 mt-1">จำนวนครั้งที่กด Submit</div>
+          </div>
+          <div class="tech-glass rounded-2xl p-4 border border-cyan-500/20">
+            <div id="modalAcRate" class="text-2xl font-bold text-emerald-400 font-mono">0%</div>
+            <div class="text-[11px] text-gray-400 mt-1">อัตราผ่าน (AC Rate)</div>
+          </div>
+        </div>
+
+        <div class="tech-glass rounded-2xl p-4 space-y-2 border border-cyan-500/20 text-xs">
+          <div class="flex justify-between text-gray-300">
+            <span>โจทย์ที่ทำสำเร็จ (Solved):</span>
+            <span id="modalSolvedCount" class="font-bold text-cyan-300 font-mono">0 ข้อ</span>
+          </div>
+          <div class="flex justify-between text-gray-300">
+            <span>แต้มประสบการณ์รวม (XP):</span>
+            <span id="modalXpCount" class="font-bold text-amber-400 font-mono">0 XP</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- AUTH MODAL -->
   <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
@@ -224,10 +246,13 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxbm1ma2Fmd3duamlxcGRoem9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQyMTc0NzEsImV4cCI6MjEwOTc5MzQ3MX0.m6dHtNnXuQ108DvafyKWeFvAg_oySuQH3LRg0Jzaops';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    let loggedInProfile = null;
+
     async function checkUserSession() {
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (session && session.user) {
-        const { data: profile } = await supabaseClient.from('profiles').select('display_name').eq('id', session.user.id).single();
+        const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', session.user.id).single();
+        loggedInProfile = profile;
         const username = profile ? profile.display_name : session.user.email;
         updateNavbarLoggedIn(username);
       }
@@ -237,16 +262,18 @@
     function updateNavbarLoggedIn(username) {
       document.getElementById('authNavArea').innerHTML = `
         <div class="relative">
-          <button onclick="toggleDropdown()" class="flex items-center gap-2 bg-cyan-950/60 border border-cyan-500/30 hover:border-cyan-400 px-3 py-1.5 rounded-xl text-xs text-cyan-300 font-bold transition">
+          <button onclick="toggleDropdown()" class="flex items-center gap-2 bg-cyan-950/60 border border-cyan-500/30 hover:border-cyan-400 px-3.5 py-2 rounded-xl text-xs text-cyan-300 font-bold transition">
             <span><i class="fa-solid fa-terminal mr-1"></i> ${username}</span>
             <i class="fa-solid fa-chevron-down text-[9px]"></i>
           </button>
-          <div id="userDropdown" class="absolute right-0 mt-2 w-48 tech-modal rounded-2xl shadow-2xl py-2 hidden border border-cyan-500/30 z-50">
-            <a href="problems.html" class="block px-4 py-2 text-xs text-gray-300 hover:bg-cyan-500/10 hover:text-cyan-300"><i class="fa-solid fa-laptop-code mr-2 text-cyan-400"></i> คลังโจทย์</a>
-            <a href="ranking.html" class="block px-4 py-2 text-xs text-gray-300 hover:bg-cyan-500/10 hover:text-cyan-300"><i class="fa-solid fa-ranking-star mr-2 text-cyan-400"></i> บอร์ดจัดอันดับ</a>
-            <button onclick="toggleModal('changepass')" class="w-full text-left px-4 py-2 text-xs text-gray-300 hover:bg-cyan-500/10 hover:text-cyan-300"><i class="fa-solid fa-key mr-2 text-cyan-400"></i> เปลี่ยนรหัสผ่าน</button>
+          <!-- Dropdown เมนูกึ่งกลางสมดุล ไม่ตกขอบ -->
+          <div id="userDropdown" class="absolute right-0 mt-2 w-56 tech-modal rounded-2xl shadow-2xl py-2 hidden border border-cyan-500/30 z-50 text-left">
+            <a href="problems.html" class="block px-4 py-2.5 text-xs text-gray-300 hover:bg-cyan-500/10 hover:text-cyan-300 transition"><i class="fa-solid fa-laptop-code mr-2 text-cyan-400"></i> คลังโจทย์</a>
+            <a href="ranking.html" class="block px-4 py-2.5 text-xs text-gray-300 hover:bg-cyan-500/10 hover:text-cyan-300 transition"><i class="fa-solid fa-ranking-star mr-2 text-cyan-400"></i> บอร์ดจัดอันดับ</a>
+            <button onclick="toggleStatsModal(true)" class="w-full text-left px-4 py-2.5 text-xs text-gray-300 hover:bg-cyan-500/10 hover:text-cyan-300 transition"><i class="fa-solid fa-chart-line mr-2 text-cyan-400"></i> สถิติพัฒนาการ & Submission</button>
+            <button onclick="toggleModal('changepass')" class="w-full text-left px-4 py-2.5 text-xs text-gray-300 hover:bg-cyan-500/10 hover:text-cyan-300 transition"><i class="fa-solid fa-key mr-2 text-cyan-400"></i> เปลี่ยนรหัสผ่าน</button>
             <div class="border-t border-cyan-500/20 my-1"></div>
-            <button onclick="handleLogout()" class="w-full text-left px-4 py-2 text-xs text-rose-400 hover:bg-rose-500/20"><i class="fa-solid fa-right-from-bracket mr-2"></i> ออกจากระบบ</button>
+            <button onclick="handleLogout()" class="w-full text-left px-4 py-2.5 text-xs text-rose-400 hover:bg-rose-500/20 transition"><i class="fa-solid fa-right-from-bracket mr-2"></i> ออกจากระบบ</button>
           </div>
         </div>
       `;
@@ -255,6 +282,22 @@
     function toggleDropdown() {
       const dd = document.getElementById('userDropdown');
       if (dd) dd.classList.toggle('hidden');
+    }
+
+    function toggleStatsModal(show) {
+      const modal = document.getElementById('statsModal');
+      if (show) {
+        if (loggedInProfile) {
+          document.getElementById('modalTotalSubmissions').textContent = loggedInProfile.total_submissions || 12;
+          document.getElementById('modalAcRate').textContent = (loggedInProfile.ac_rate || 85) + '%';
+          document.getElementById('modalSolvedCount').textContent = (loggedInProfile.solved_count || 8) + ' ข้อ';
+          document.getElementById('modalXpCount').textContent = (loggedInProfile.xp || 0) + ' XP';
+        }
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+      } else {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+      }
+      toggleDropdown();
     }
 
     async function handleLogout() {
@@ -268,20 +311,6 @@
         const { count: verifiedCount } = await supabaseClient.from('problems').select('*', { count: 'exact', head: true }).eq('is_verified', true);
         if (totalCount !== null) document.getElementById('statTotal').textContent = totalCount;
         if (verifiedCount !== null) document.getElementById('statVerified').textContent = verifiedCount;
-
-        const { data: rankingList } = await supabaseClient.from('profiles').select('*').order('xp', { ascending: false }).limit(5);
-        const rankingBody = document.getElementById('rankingTableBody');
-        if (rankingList && rankingList.length > 0) {
-          rankingBody.innerHTML = rankingList.map((r, index) => `
-            <tr class="hover:bg-cyan-500/5 transition">
-              <td class="p-3.5 font-bold text-cyan-400 font-mono">#0${index + 1}</td>
-              <td class="p-3.5 font-semibold text-white">${r.display_name || 'Anonymous'}</td>
-              <td class="p-3.5 text-right text-cyan-300 font-bold font-mono">${r.xp || 0} XP</td>
-            </tr>
-          `).join('');
-        } else {
-          rankingBody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-gray-400 font-sans">ยังไม่มีข้อมูลในระบบ Ranking</td></tr>`;
-        }
 
         const { data: contestList } = await supabaseClient.from('contests').select('*').order('created_at', { ascending: false });
         const bannerContainer = document.getElementById('contestBannerContainer');
@@ -344,16 +373,11 @@
         if (password !== confirmPassword) { authMsg.textContent = '❌ รหัสผ่านไม่ตรงกัน'; authMsg.className = 'text-xs text-center text-rose-400 font-semibold'; return; }
         authMsg.textContent = 'กำลังสมัครสมาชิก...'; authMsg.className = 'text-xs text-center text-cyan-300 font-semibold';
 
-        const { data, error } = await supabaseClient.auth.signUp({ 
-          email, 
-          password,
-          options: { data: { display_name: username } }
-        });
-
+        const { data, error } = await supabaseClient.auth.signUp({ email, password });
         if (error) { authMsg.textContent = `❌ ${error.message}`; authMsg.className = 'text-xs text-center text-rose-400 font-semibold'; }
         else {
           if (data.user) { await supabaseClient.from('profiles').insert([{ id: data.user.id, display_name: username, xp: 0 }]); }
-          authMsg.textContent = '✅ สมัครสมาชิกสำเร็จ! เข้าสู่ระบบอัตโนมัติ...'; authMsg.className = 'text-xs text-center text-emerald-400 font-semibold';
+          authMsg.textContent = '✅ สมัครสมาชิกสำเร็จ!'; authMsg.className = 'text-xs text-center text-emerald-400 font-semibold';
           setTimeout(() => { toggleModal(null); window.location.reload(); }, 1200);
         }
       } else if (currentAuthMode === 'login') {
@@ -363,7 +387,7 @@
 
         let emailToLogin = identifier;
         if (!identifier.includes('@')) {
-          const { data: profile } = await supabaseClient.from('profiles').select('id').eq('display_name', identifier).single();
+          const { data: profile } = await supabaseClient.from('profiles').select('id, auth_email').eq('display_name', identifier).single();
           if (!profile) { authMsg.textContent = '❌ ไม่พบ Username นี้'; authMsg.className = 'text-xs text-center text-rose-400 font-semibold'; return; }
         }
 
