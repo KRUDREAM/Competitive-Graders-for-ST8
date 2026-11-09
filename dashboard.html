@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | ST8 CP-Grader</title>
+  <!-- Google Fonts: Kanit -->
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Kanit', sans-serif;
+      background-color: #070913;
+      color: #f3f4f6;
+    }
+    .glass-card {
+      background: rgba(18, 22, 38, 0.65);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #070913; }
+    ::-webkit-scrollbar-thumb { background: #1e2538; border-radius: 4px; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#070913] text-gray-100">
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="sticky top-0 z-40 glass-card border-b border-white/5 px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="bg-gradient-to-tr from-indigo-600 to-violet-500 p-2.5 rounded-2xl shadow-lg shadow-indigo-500/25 text-white font-bold text-lg flex items-center justify-center w-10 h-10">
+        <i class="fa-solid fa-code"></i>
+      </div>
+      <div>
+        <h1 class="font-bold text-base tracking-wide text-white">ST8 CP-Grader</h1>
+        <p class="text-[10px] text-indigo-300/80 font-medium">Student Dashboard</p>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-300">
+      <a href="#problems" onclick="switchTab('problems')" id="nav-problems" class="text-indigo-400 transition flex items-center gap-2"><i class="fa-solid fa-laptop-code"></i> คลังโจทย์</a>
+      <a href="#contests" onclick="switchTab('contests')" id="nav-contests" class="hover:text-indigo-400 transition flex items-center gap-2"><i class="fa-solid fa-trophy"></i> หน้า Contest</a>
+      <a href="#quests" onclick="switchTab('quests')" id="nav-quests" class="hover:text-indigo-400 transition flex items-center gap-2"><i class="fa-solid fa-flag-checkered"></i> เควสต์ & ภารกิจ</a>
+    </nav>
+
+    <!-- User Profile Info -->
+    <div class="flex items-center gap-3">
+      <div class="text-right hidden sm:block">
+        <div class="text-xs font-bold text-white">AP (ม.304)</div>
+        <div class="text-[10px] text-indigo-400">XP: 2,450 &bull; Rank #3</div>
+      </div>
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-white shadow-md">
+        AP
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="max-w-6xl w-full mx-auto p-6 flex-1 space-y-8">
+
+    <!-- TAB 1: PROBLEM BANK (คลังโจทย์) -->
+    <section id="tab-problems" class="space-y-6">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h2 class="text-2xl font-bold text-white mb-1"><i class="fa-solid fa-book-open text-indigo-400 mr-2"></i> คลังโจทย์ (Problem Bank)</h2>
+          <p class="text-xs text-gray-400">เลือกโจทย์ภาษา C/C++ เพื่อเข้าไปเขียนโค้ดและส่งตรวจผลลัพธ์ผ่านระบบ Grader อัตโนมัติ</p>
+        </div>
+        <button class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2.5 rounded-xl text-xs font-semibold shadow-lg shadow-indigo-600/30 transition flex items-center gap-2">
+          <i class="fa-solid fa-plus"></i> ส่งโจทย์ใหม่เข้าสู่ระบบ
+        </button>
+      </div>
+
+      <!-- Problem Filter Bar -->
+      <div class="glass-card rounded-2xl p-4 flex flex-wrap gap-4 items-center justify-between border border-white/5">
+        <div class="flex items-center gap-2 w-full md:w-auto">
+          <input type="text" placeholder="ค้นหาชื่อโจทย์ หรือ ID..." class="bg-black/40 border border-white/10 rounded-xl px-4 py-2 text-xs text-white focus:outline-none focus:border-indigo-500 w-full md:w-64">
+        </div>
+        <div class="flex items-center gap-2 text-xs">
+          <span class="text-gray-400">ระดับความยาก:</span>
+          <select class="bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-indigo-500">
+            <option>ทั้งหมด</option>
+            <option>Easy (ง่าย)</option>
+            <option>Medium (ปานกลาง)</option>
+            <option>Hard (ยาก)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Problems Table / List -->
+      <div class="glass-card rounded-3xl overflow-hidden border border-white/5">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-white/10 bg-white/5 text-[11px] text-gray-400 uppercase tracking-wider">
+                <th class="p-4">สถานะ</th>
+                <th class="p-4">ID & ชื่อโจทย์</th>
+                <th class="p-4">ระดับ</th>
+                <th class="p-4">ภาษา</th>
+                <th class="p-4 text-right">จัดการ / ทำโจทย์</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5 text-xs">
+              <tr class="hover:bg-white/5 transition">
+                <td class="p-4"><span class="px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-semibold">Solved</span></td>
+                <td class="p-4 font-semibold text-white">#PROB-101 : Sum of Two Numbers (C++)</td>
+                <td class="p-4"><span class="text-emerald-400 font-medium">Easy</span></td>
+                <td class="p-4 text-gray-300">C / C++</td>
+                <td class="p-4 text-right">
+                  <button class="bg-indigo-600/30 hover:bg-indigo-600 text-indigo-300 hover:text-white px-3.5 py-1.5 rounded-xl font-medium transition">ลุยโจทย์</button>
+                </td>
+              </tr>
+              <tr class="hover:bg-white/5 transition">
+                <td class="p-4"><span class="px-2 py-1 rounded-full bg-amber-500/20 text-amber-400 text-[10px] font-semibold">Attempted</span></td>
+                <td class="p-4 font-semibold text-white">#PROB-102 : Binary Search Algorithm</td>
+                <td class="p-4"><span class="text-amber-400 font-medium">Medium</span></td>
+                <td class="p-4 text-gray-300">C++</td>
+                <td class="p-4 text-right">
+                  <button class="bg-indigo-600/30 hover:bg-indigo-600 text-indigo-300 hover:text-white px-3.5 py-1.5 rounded-xl font-medium transition">ลุยโจทย์</button>
+                </td>
+              </tr>
+              <tr class="hover:bg-white/5 transition">
+                <td class="p-4"><span class="px-2 py-1 rounded-full bg-gray-500/20 text-gray-400 text-[10px] font-semibold">Todo</span></td>
+                <td class="p-4 font-semibold text-white">#PROB-103 : Dijkstra Shortest Path</td>
+                <td class="p-4"><span class="text-rose-400 font-medium">Hard</span></td>
+                <td class="p-4 text-gray-300">C++</td>
+                <td class="p-4 text-right">
+                  <button class="bg-indigo-600/30 hover:bg-indigo-600 text-indigo-300 hover:text-white px-3.5 py-1.5 rounded-xl font-medium transition">ลุยโจทย์</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: CONTEST HUB (หน้าคอนเทสต์) -->
+    <section id="tab-contests" class="space-y-6 hidden">
+      <div>
+        <h2 class="text-2xl font-bold text-white mb-1"><i class="fa-solid fa-trophy text-amber-400 mr-2"></i> ระบบการแข่งขัน (Contest Hub)</h2>
+        <p class="text-xs text-gray-400">ตรวจสอบการแข่งขันที่กำลังจัดอยู่ หรือเตรียมตัวลงทะเบียนใน Contest ที่กำลังจะมาถึง</p>
+      </div>
+
+      <!-- Live Contest Banner -->
+      <div class="glass-card rounded-3xl p-6 md:p-8 border border-amber-500/40 relative overflow-hidden bg-gradient-to-r from-amber-500/10 via-transparent to-purple-500/10">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
+          <div>
+            <div class="flex items-center gap-2.5 mb-3">
+              <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> กำลังแข่งขัน (Live)
+              </span>
+              <span class="text-xs text-gray-300"><i class="fa-regular fa-clock mr-1"></i> เหลือเวลาอีก: 1 ชม. 45 นาที</span>
+            </div>
+            <h3 class="text-xl md:text-2xl font-bold text-white mb-2">ST8 Weekly Competitive Contest #04</h3>
+            <p class="text-xs md:text-sm text-gray-400 max-w-xl leading-relaxed">
+              การแข่งขันเขียนโปรแกรมจับเวลา 3 ชั่วโมงเต็ม ประลองอัลกอริทึมภาษา C/C++ 4 ข้อ ชิงความเป็นหนึ่งและแต้ม XP พิเศษ
+            </p>
+          </div>
+          <button class="bg-gradient-to-r from-amber-500 to-orange-500 hover:opacity-95 text-gray-950 font-bold px-6 py-3 rounded-xl text-xs shadow-lg shadow-amber-500/20 transition whitespace-nowrap">
+            <i class="fa-solid fa-right-to-bracket mr-1.5"></i> เข้าสู่สนามแข่ง (Enter Contest)
+          </button>
+        </div>
+      </div>
+
+      <!-- Upcoming Contests -->
+      <h3 class="text-lg font-bold text-white pt-4">Contest ที่กำลังจะมาถึง</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="glass-card rounded-2xl p-6 border border-white/10">
+          <div class="flex justify-between items-start mb-3">
+            <span class="text-[10px] bg-indigo-500/20 text-indigo-300 px-2.5 py-1 rounded-full font-semibold">เปิดรับสมัครแล้ว</span>
+            <span class="text-xs text-gray-400">เสาร์หน้า 18:00 น.</span>
+          </div>
+          <h4 class="font-bold text-white text-base mb-1">POSN Prep Mock Contest #1</h4>
+          <p class="text-xs text-gray-400 mb-4">จำลองข้อสอบแข่งขันค่าย สอวน. คอมพิวเตอร์ สำหรับเตรียมความพร้อม</p>
+          <button class="w-full bg-white/10 hover:bg-white/20 text-white font-medium py-2 rounded-xl text-xs transition">
+            ลงทะเบียนล่วงหน้า
+          </button>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 border border-white/10">
+          <div class="flex justify-between items-start mb-3">
+            <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2.5 py-1 rounded-full font-semibold">เร็วๆ นี้</span>
+            <span class="text-xs text-gray-400">สิ้นเดือนนี้</span>
+          </div>
+          <h4 class="font-bold text-white text-base mb-1">ST8 Final Battle Championship</h4>
+          <p class="text-xs text-gray-400 mb-4">ศึกชิงแชมป์ประจำเทอม รวมโจทย์ระดับ Hard ท้าทายยอดฝีมือทุกคน</p>
+          <button class="w-full bg-white/10 hover:bg-white/20 text-white font-medium py-2 rounded-xl text-xs transition">
+            ดูรายละเอียดเพิ่มเติม
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: QUESTS & TASKS (เควสต์) -->
+    <section id="tab-quests" class="space-y-6 hidden">
+      <div>
+        <h2 class="text-2xl font-bold text-white mb-1"><i class="fa-solid fa-flag-checkered text-emerald-400 mr-2"></i> เควสต์ & ภารกิจสะสม XP</h2>
+        <p class="text-xs text-gray-400">ทำภารกิจรายวันและรายสัปดาห์ให้สำเร็จเพื่อรับแต้มประสบการณ์พิเศษ</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="glass-card rounded-2xl p-6 border border-indigo-500/30">
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="font-bold text-sm text-indigo-400">เควสต์ประจำวัน (Daily Quest)</h3>
+            <span class="text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded">รีเซ็ตใน 4 ชม.</span>
+          </div>
+          <p class="text-xs text-gray-300 mb-3">พิชิตโจทย์ระดับ Easy หรือ Medium อย่างน้อย 1 ข้อวันนี้</p>
+          <div class="w-full bg-black/40 rounded-full h-2 mb-2">
+            <div class="bg-indigo-500 h-full w-full rounded-full"></div>
+          </div>
+          <div class="flex justify-between text-xs text-gray-400">
+            <span>สถานะ: สำเร็จแล้ว</span>
+            <span class="text-emerald-400 font-semibold">+100 XP (รับแล้ว)</span>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 border border-amber-500/30">
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="font-bold text-sm text-amber-400">Weekly Task #4</h3>
+            <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded">เหลือ 3 วัน</span>
+          </div>
+          <p class="text-xs text-gray-300 mb-3">ตะลุยโจทย์หมวด Sorting & Searching ให้ครบ 3 ข้อ</p>
+          <div class="w-full bg-black/40 rounded-full h-2 mb-2">
+            <div class="bg-amber-500 h-full w-2/3 rounded-full"></div>
+          </div>
+          <div class="flex justify-between text-xs text-gray-400">
+            <span>ความคืบหน้า: 2/3 ข้อ</span>
+            <span class="text-amber-400 font-semibold">+350 XP</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="glass-card border-t border-white/5 py-6 text-center text-xs text-gray-500 mt-auto">
+    <p>ST8 Competitive Programming Grader System &bull; พัฒนาขึ้นเพื่อเหล่านักเรียนผู้รักการเขียนโค้ดภาษา C และ C++</p>
+  </footer>
+
+  <!-- JAVASCRIPT FOR TAB SWITCHING -->
+  <script>
+    function switchTab(tabName) {
+      // ซ่อนทุกแท็บ
+      document.getElementById('tab-problems').classList.add('hidden');
+      document.getElementById('tab-contests').classList.add('hidden');
+      document.getElementById('tab-quests').classList.add('hidden');
+
+      // ลบสี active จากปุ่มทั้งหมด
+      document.getElementById('nav-problems').className = 'hover:text-indigo-400 transition flex items-center gap-2';
+      document.getElementById('nav-contests').className = 'hover:text-indigo-400 transition flex items-center gap-2';
+      document.getElementById('nav-quests').className = 'hover:text-indigo-400 transition flex items-center gap-2';
+
+      // แสดงแท็บที่เลือกและไฮไลต์ปุ่ม
+      document.getElementById('tab-' + tabName).classList.remove('hidden');
+      document.getElementById('nav-' + tabName).className = 'text-indigo-400 font-semibold transition flex items-center gap-2';
+    }
+  </script>
+
+</body>
+</html>
