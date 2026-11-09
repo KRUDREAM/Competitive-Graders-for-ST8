@@ -19,7 +19,7 @@
       color: #f3f4f6;
     }
     .glass-card {
-      background: rgba(18, 22, 38, 0.7);
+      background: rgba(18, 22, 38, 0.65);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -36,33 +36,19 @@
       0%, 100% { opacity: 0.3; transform: scale(1); }
       50% { opacity: 0.6; transform: scale(1.1); }
     }
-    @keyframes fogMove {
-      0% { transform: translateX(-10%) translateY(0); }
-      50% { transform: translateX(10%) translateY(-5%); }
-      100% { transform: translateX(-10%) translateY(0); }
-    }
     .orb-1 { animation: softGlow 9s ease-in-out infinite; }
     .orb-2 { animation: softGlow 12s ease-in-out infinite 3s; }
-    .fog-layer {
-      position: absolute;
-      width: 200%;
-      height: 100%;
-      background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.04) 0%, transparent 70%);
-      pointer-events: none;
-      animation: fogMove 18s ease-in-out infinite;
-    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col relative overflow-x-hidden selection:bg-indigo-500 selection:text-white">
 
-  <!-- Background Effects -->
+  <!-- Background Glow Effects -->
   <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-indigo-600/15 rounded-full blur-[130px] pointer-events-none orb-1"></div>
   <div class="absolute top-1/3 right-1/4 w-[450px] h-[450px] bg-purple-600/15 rounded-full blur-[130px] pointer-events-none orb-2"></div>
-  <div class="fog-layer top-0 left-0"></div>
 
   <!-- NAVIGATION BAR -->
   <header class="sticky top-0 z-40 glass-card border-b border-white/5 px-6 py-4 flex items-center justify-between">
-    <div class="flex items-center gap-3 cursor-pointer" onclick="switchView('landing')">
+    <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
       <div class="bg-gradient-to-tr from-indigo-600 to-violet-500 p-2.5 rounded-2xl shadow-lg shadow-indigo-500/25 text-white font-bold text-lg flex items-center justify-center w-10 h-10">
         <i class="fa-solid fa-code"></i>
       </div>
@@ -73,11 +59,12 @@
     </div>
 
     <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-300">
+      <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="hover:text-indigo-400 transition"><i class="fa-solid fa-house mr-1"></i> หน้าหลัก</a>
       <a href="#about" class="hover:text-indigo-400 transition">วัตถุประสงค์</a>
       <a href="#contests" class="hover:text-indigo-400 transition">Contest</a>
       <a href="#ranking-section" class="hover:text-indigo-400 transition">Ranking</a>
       <a href="#faq" class="hover:text-indigo-400 transition">FAQ</a>
-      <a href="#" onclick="checkAuthAndRedirect()" class="text-indigo-400 hover:text-indigo-300 transition font-semibold"><i class="fa-solid fa-laptop-code mr-1"></i> คลังโจทย์</a>
+      <a href="problems.html" class="text-indigo-400 hover:text-indigo-300 transition font-semibold"><i class="fa-solid fa-laptop-code mr-1"></i> คลังโจทย์</a>
     </nav>
 
     <div id="authNavArea" class="flex items-center gap-3">
@@ -90,75 +77,75 @@
     </div>
   </header>
 
-  <!-- VIEW 1: LANDING PAGE -->
-  <div id="view-landing" class="flex-1 flex flex-col space-y-16 pb-16 relative z-10">
+  <!-- MAIN LANDING CONTAINER -->
+  <main class="flex-1 max-w-5xl mx-auto px-6 py-12 space-y-16 relative z-10 w-full">
     
     <!-- Hero Section -->
-    <section id="about" class="max-w-5xl mx-auto px-6 pt-16 text-center">
+    <section id="about" class="text-center pt-8">
       <div class="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/25 text-indigo-300 px-4 py-1.5 rounded-full text-xs font-semibold mb-6 shadow-sm">
         <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span> แพลตฟอร์มฝึกเขียนโค้ดและประลองอัลกอริทึม
       </div>
       
-      <h2 class="text-3xl md:text-6xl font-extrabold text-white tracking-tight leading-tight mb-6">
+      <h2 class="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-6">
         ยกระดับทักษะการเขียนโปรแกรม <br class="hidden md:block">ด้วยระบบ <span class="bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">Competitive Programming</span>
       </h2>
       
-      <p class="text-gray-400 text-sm md:text-base max-w-2xl mx-auto mb-10 leading-relaxed font-light">
-        <strong>ST8 CP-Grader</strong> พื้นที่สำหรับนักเรียนและผู้ที่สนใจฝึกฝนการเขียนโค้ดภาษา C และ C++ ตรวจสอบผลลัพธ์อัตโนมัติแบบ Realtime พร้อมระบบสร้างโจทย์อิสระ เควสต์รายสัปดาห์ และคอมมูนิตี้แลกเปลี่ยนความรู้
+      <p class="text-gray-400 text-sm max-w-2xl mx-auto mb-8 leading-relaxed font-light">
+        <strong>ST8 CP-Grader</strong> พื้นที่สำหรับนักเรียนและผู้ที่สนใจฝึกฝนการเขียนโค้ดภาษา C และ C++ ตรวจสอบผลลัพธ์อัตโนมัติแบบ Realtime พร้อมระบบจัดอันดับและคอมมูนิตี้แลกเปลี่ยนความรู้
       </p>
 
       <div class="flex flex-wrap justify-center gap-4">
-        <button onclick="toggleModal('register')" class="bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 hover:opacity-95 text-white px-8 py-3.5 rounded-2xl text-sm font-bold shadow-2xl shadow-indigo-600/40 transition transform hover:-translate-y-0.5 flex items-center gap-2.5">
-          <i class="fa-solid fa-rocket"></i> เริ่มต้นใช้งานฟรีทันที
+        <button onclick="toggleModal('register')" class="bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 hover:opacity-95 text-white px-7 py-3 rounded-2xl text-xs font-bold shadow-xl shadow-indigo-600/30 transition flex items-center gap-2">
+          <i class="fa-solid fa-rocket"></i> สมัครสมาชิกฟรีทันที
         </button>
-        <button onclick="checkAuthAndRedirect()" class="glass-card hover:bg-white/5 text-gray-200 border border-white/10 px-8 py-3.5 rounded-2xl text-sm font-semibold transition flex items-center gap-2.5">
+        <a href="problems.html" class="glass-card hover:bg-white/5 text-gray-200 border border-white/10 px-7 py-3 rounded-2xl text-xs font-semibold transition flex items-center gap-2">
           <i class="fa-solid fa-laptop-code text-indigo-400"></i> เข้าสู่หน้าคลังโจทย์
-        </button>
+        </a>
       </div>
     </section>
 
     <!-- Latest Contest Section -->
-    <section id="contests" class="max-w-5xl mx-auto px-6 w-full">
-      <div id="contestBannerContainer" class="glass-card rounded-3xl p-6 md:p-8 border border-indigo-500/30 relative overflow-hidden group">
-        <div class="text-center text-gray-400 text-xs py-4">กำลังตรวจสอบข้อมูลการแข่งขันจากฐานข้อมูล...</div>
+    <section id="contests" class="w-full">
+      <div id="contestBannerContainer" class="glass-card rounded-3xl p-6 md:p-8 border border-indigo-500/30 relative overflow-hidden">
+        <div class="text-center text-gray-400 text-xs py-2">กำลังตรวจสอบข้อมูลการแข่งขัน...</div>
       </div>
     </section>
 
     <!-- Real Stats Banner -->
-    <section class="max-w-5xl mx-auto px-6 w-full">
-      <div class="glass-card rounded-3xl p-6 md:p-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center border border-white/10">
+    <section class="w-full">
+      <div class="glass-card rounded-3xl p-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center border border-white/10">
         <div>
-          <div id="statTotal" class="text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent mb-1">-</div>
-          <div class="text-xs text-gray-400 font-medium">โจทย์ในระบบทั้งหมด</div>
+          <div id="statTotal" class="text-2xl md:text-3xl font-extrabold text-indigo-400 mb-1">-</div>
+          <div class="text-xs text-gray-400">โจทย์ในระบบทั้งหมด</div>
         </div>
         <div>
-          <div id="statVerified" class="text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent mb-1">-</div>
-          <div class="text-xs text-gray-400 font-medium">โจทย์ผ่านการรับรอง (Verified)</div>
+          <div id="statVerified" class="text-2xl md:text-3xl font-extrabold text-emerald-400 mb-1">-</div>
+          <div class="text-xs text-gray-400">โจทย์ที่ผ่านการรับรอง</div>
         </div>
         <div>
-          <div class="text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent mb-1">100%</div>
-          <div class="text-xs text-gray-400 font-medium">ระบบตรวจผลอัตโนมัติ Realtime</div>
+          <div class="text-2xl md:text-3xl font-extrabold text-amber-400 mb-1">100%</div>
+          <div class="text-xs text-gray-400">ระบบตรวจผล Realtime</div>
         </div>
         <div>
-          <div class="text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-1">C / C++</div>
-          <div class="text-xs text-gray-400 font-medium">รองรับมาตรฐาน GCC เต็มรูปแบบ</div>
+          <div class="text-2xl md:text-3xl font-extrabold text-purple-400 mb-1">C / C++</div>
+          <div class="text-xs text-gray-400">มาตรฐาน GCC</div>
         </div>
       </div>
     </section>
 
-    <!-- RANKING / LEADERBOARD PREVIEW SECTION -->
-    <section id="ranking-section" class="max-w-5xl mx-auto px-6 w-full">
-      <div class="text-center mb-8">
-        <h3 class="text-2xl font-bold text-white mb-2"><i class="fa-solid fa-trophy text-amber-400 mr-2"></i> บอร์ดจัดอันดับผู้ประลองโค้ด (Ranking)</h3>
-        <p class="text-xs text-gray-400">ผู้ที่ทำคะแนนสะสม XP สูงสุดในระบบขณะนี้</p>
+    <!-- Ranking Preview Section -->
+    <section id="ranking-section" class="w-full space-y-4">
+      <div class="text-center mb-6">
+        <h3 class="text-xl font-bold text-white mb-1"><i class="fa-solid fa-trophy text-amber-400 mr-2"></i> บอร์ดจัดอันดับ (Ranking)</h3>
+        <p class="text-xs text-gray-400">ผู้ที่ทำคะแนนสะสม XP สูงสุดในระบบ</p>
       </div>
-      <div class="glass-card rounded-3xl overflow-hidden border border-white/10">
+      <div class="glass-card rounded-2xl overflow-hidden border border-white/10">
         <table class="w-full text-left text-xs">
           <thead class="bg-white/5 text-gray-400 border-b border-white/10">
             <tr>
-              <th class="p-4">อันดับ</th>
-              <th class="p-4">ชื่อผู้ใช้งาน (Username)</th>
-              <th class="p-4 text-right">คะแนนสะสม (XP)</th>
+              <th class="p-3.5">อันดับ</th>
+              <th class="p-3.5">ชื่อผู้ใช้งาน (Username)</th>
+              <th class="p-3.5 text-right">คะแนน (XP)</th>
             </tr>
           </thead>
           <tbody id="rankingTableBody" class="divide-y divide-white/5">
@@ -168,73 +155,41 @@
       </div>
     </section>
 
-    <!-- FAQ SECTION -->
-    <section id="faq" class="max-w-5xl mx-auto px-6 w-full space-y-4">
-      <div class="text-center mb-8">
-        <h3 class="text-2xl font-bold text-white mb-2"><i class="fa-solid fa-circle-question text-indigo-400 mr-2"></i> คำถามที่พบบ่อย (FAQ)</h3>
-        <p class="text-xs text-gray-400">ข้อสงสัยเบื้องต้นเกี่ยวกับการใช้งานแพลตฟอร์ม</p>
+    <!-- FAQ Section -->
+    <section id="faq" class="w-full space-y-4">
+      <div class="text-center mb-6">
+        <h3 class="text-xl font-bold text-white mb-1"><i class="fa-solid fa-circle-question text-indigo-400 mr-2"></i> คำถามที่พบบ่อย (FAQ)</h3>
       </div>
-
       <div class="space-y-3">
-        <div class="glass-card rounded-2xl p-5 border border-white/5">
-          <h4 class="font-bold text-white text-sm mb-1">Q: ระบบรองรับภาษาโปรแกรมอะไรบ้าง?</h4>
-          <p class="text-xs text-gray-400">A: ขณะนี้ระบบรองรับภาษา C และ C++ (GCC 11) มาตรฐานสำหรับการแข่งขัน Competitive Programming ครับ</p>
+        <div class="glass-card rounded-xl p-4 border border-white/5">
+          <h4 class="font-bold text-white text-xs mb-1">Q: ระบบรองรับภาษาอะไรบ้าง?</h4>
+          <p class="text-xs text-gray-400">A: รองรับภาษา C และ C++ มาตรฐานสำหรับการแข่งขัน Competitive Programming</p>
         </div>
-        <div class="glass-card rounded-2xl p-5 border border-white/5">
-          <h4 class="font-bold text-white text-sm mb-1">Q: ทำไมต้องสมัครสมาชิ0ก่อนถึงจะทำโจทย์ได้?</h4>
-          <p class="text-xs text-gray-400">A: เพื่อบันทึกประวัติการส่งโค้ด คะแนน XP และจัดอันดับ Ranking ในระบบครับ</p>
-        </div>
-        <div class="glass-card rounded-2xl p-5 border border-white/5">
-          <h4 class="font-bold text-white text-sm mb-1">Q: นักเรียนภายนอกสามารถสมัครใช้งานได้หรือไม่?</h4>
-          <p class="text-xs text-gray-400">A: สามารถสมัครใช้งานได้ทุกคนที่สนใจพัฒนาทักษะอัลกอริทึมและ C/C++ ครับ</p>
+        <div class="glass-card rounded-xl p-4 border border-white/5">
+          <h4 class="font-bold text-white text-xs mb-1">Q: สมัครแล้วใช้งานได้ทันทีไหม?</h4>
+          <p class="text-xs text-gray-400">A: ใช้งานได้ทันทีหลังสมัครสมาชิก ไม่ต้องรอยืนยันอีเมลครับ</p>
         </div>
       </div>
     </section>
 
-  </div>
+  </main>
 
-  <!-- VIEW 2: DASHBOARD (PROBLEM BANK - Protected) -->
-  <div id="view-dashboard" class="flex-1 max-w-6xl w-full mx-auto p-6 space-y-8 hidden relative z-10">
-    <div class="flex justify-between items-center border-b border-white/10 pb-4">
-      <div>
-        <h3 class="text-2xl font-bold text-white"><i class="fa-solid fa-book-open text-indigo-400 mr-2"></i> คลังโจทย์ทั้งหมด (เฉพาะที่ผ่านการรับรองจาก Admin)</h3>
-        <p class="text-xs text-gray-400 mt-1">เลือกโจทย์เพื่อเข้าสู่ระบบเขียนโค้ดและส่งตรวจ</p>
-      </div>
-      <button onclick="switchView('landing')" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-xl text-xs transition">กลับหน้าหลัก</button>
-    </div>
-
-    <div class="glass-card rounded-2xl overflow-hidden border border-white/10">
-      <table class="w-full text-left text-xs">
-        <thead class="bg-white/5 text-gray-400 border-b border-white/10">
-          <tr>
-            <th class="p-4">ID & ชื่อโจทย์</th>
-            <th class="p-4">ระดับความยาก</th>
-            <th class="p-4 text-right">ดำเนินการ</th>
-          </tr>
-        </thead>
-        <tbody id="verifiedProblemsTable" class="divide-y divide-white/5">
-          <tr><td colspan="3" class="p-4 text-center text-gray-400">กำลังโหลดรายการโจทย์...</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- AUTH MODAL: LOGIN / REGISTER / CHANGE PASSWORD -->
+  <!-- AUTH MODAL -->
   <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/75 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
     <div class="glass-modal rounded-3xl p-8 max-w-md w-full relative transform scale-95 transition-all duration-300 border border-white/15" id="modalContainer">
       <button onclick="toggleModal(null)" class="absolute top-5 right-5 text-gray-400 hover:text-white w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition">
-        <i class="fa-solid fa-xmark text-sm"></i>
+        <i class="fa-solid fa-xmark text-xs"></i>
       </button>
 
       <div class="text-center mb-6">
-        <h3 id="modalTitle" class="text-xl font-bold text-white mb-1">เข้าสู่ระบบ</h3>
-        <p class="text-xs text-gray-400" id="modalSubtitle">ใช้ Email หรือ Username ในการเข้าสู่ระบบ</p>
+        <h3 id="modalTitle" class="text-lg font-bold text-white mb-1">เข้าสู่ระบบ</h3>
+        <p class="text-xs text-gray-400" id="modalSubtitle">กรอกข้อมูลเพื่อเข้าใช้งาน</p>
       </div>
 
       <form id="authForm" class="space-y-3.5">
         <div id="usernameGroup" class="hidden">
           <label class="block text-xs font-medium text-gray-300 mb-1">ชื่อผู้ใช้งาน (Username)</label>
-          <input type="text" id="authUsername" placeholder="เช่น angpao_dev" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+          <input type="text" id="authUsername" placeholder="angpao_dev" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
         </div>
 
         <div id="identifierGroup">
@@ -248,7 +203,7 @@
         </div>
         
         <div id="confirmPasswordGroup" class="hidden">
-          <label class="block text-xs font-medium text-gray-300 mb-1">ยืนยันรหัสผ่านอีกครั้ง (Confirm Password)</label>
+          <label class="block text-xs font-medium text-gray-300 mb-1">ยืนยันรหัสผ่านอีกครั้ง</label>
           <input type="password" id="authConfirmPassword" placeholder="••••••••" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
         </div>
 
@@ -261,18 +216,17 @@
     </div>
   </div>
 
-  <!-- FOOTER WITH TERMS & PRIVACY -->
-  <footer class="glass-card border-t border-white/5 py-8 px-6 mt-auto relative z-10 text-center text-xs text-gray-400 space-y-3">
+  <!-- FOOTER -->
+  <footer class="glass-card border-t border-white/5 py-6 px-6 mt-auto relative z-10 text-center text-xs text-gray-400 space-y-2">
     <p>ST8 Competitive Programming Grader System &bull; พัฒนาขึ้นเพื่อเหล่านักเรียนผู้รักการเขียนโค้ดภาษา C และ C++</p>
-    <div class="flex justify-center gap-6 text-indigo-400 font-medium">
-      <a href="#" onclick="alert('Terms & Conditions: ระบบนี้ใช้สำหรับการศึกษาและฝึกฝนการเขียนโปรแกรม ห้ามใช้กระทำการทุจริตหรือก่อกวนระบบ')" class="hover:underline">Terms & Conditions</a>
+    <div class="flex justify-center gap-4 text-indigo-400 font-medium">
+      <a href="#" onclick="alert('Terms & Conditions: ระบบนี้ใช้สำหรับการศึกษาและฝึกฝนการเขียนโปรแกรม')" class="hover:underline">Terms & Conditions</a>
       <span>&bull;</span>
-      <a href="#" onclick="alert('Privacy Policy: ข้อมูลผู้ใช้งานและรหัสผ่านจะถูกเก็บรักษาความปลอดภัยด้วยมาตรฐาน Supabase Auth อย่างเคร่งครัด')" class="hover:underline">Privacy Policy</a>
+      <a href="#" onclick="alert('Privacy Policy: ข้อมูลผู้ใช้งานจะถูกเก็บรักษาความปลอดภัยอย่างเคร่งครัด')" class="hover:underline">Privacy Policy</a>
     </div>
   </footer>
 
-  <!-- SCRIPT CONTROLLER -->
- <!-- SCRIPT CONTROLLER -->
+  <!-- SCRIPT -->
   <script>
     const SUPABASE_URL = 'https://hqnmfkafwwnjiqpdhzoh.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxbm1ma2Fmd3duamlxcGRoem9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQyMTc0NzEsImV4cCI6MjEwOTc5MzQ3MX0.m6dHtNnXuQ108DvafyKWeFvAg_oySuQH3LRg0Jzaops';
@@ -280,35 +234,21 @@
 
     let currentUser = null;
 
-    // --- ตรวจสอบสถานะ Session และดักจับ Token จากลิงก์อีเมลยืนยันทันทีที่เปิดเว็บ ---
-    async function initAuthSession() {
-      // ตรวจสอบว่ามี Token ส่งมากับ URL หลังกดลิงก์อีเมลไหม
-      const hash = window.location.hash;
-      if (hash && hash.includes('access_token')) {
-        // ให้ Supabase จัดการเคลียร์และเก็บบันทึก Session จาก URL ทันที
-        const { data, error } = await supabaseClient.auth.getSession();
-        if (!error && data.session) {
-          alert('✅ ยืนยันอีเมลและเปิดใช้งานบัญชี (Activate) สำเร็จเรียบร้อย!');
-          // ล้าง URL hash ให้สะอาด
-          window.history.replaceState({}, document.title, window.location.pathname);
-        }
-      }
-
-      // เช็ค Session ปกติ
+    async function checkUserSession() {
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (session && session.user) {
         currentUser = session.user;
         updateNavbarLoggedIn(currentUser.email);
       }
     }
-    initAuthSession();
+    checkUserSession();
 
     function updateNavbarLoggedIn(identifier) {
       document.getElementById('authNavArea').innerHTML = `
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2">
           <span class="text-xs text-indigo-300 font-bold hidden sm:inline">👤 ${identifier}</span>
           <button onclick="toggleModal('changepass')" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-xl text-xs transition">เปลี่ยนรหัสผ่าน</button>
-          <button onclick="handleLogout()" class="bg-rose-600/20 text-rose-400 hover:bg-rose-600 hover:text-white px-3 py-1.5 rounded-xl text-xs transition">ออกจากระบบ</button>
+          <button onclick="handleLogout()" class="bg-rose-600/20 text-rose-400 hover:bg-rose-600 hover:text-white px-3 py-1.5 rounded-xl text-xs transition">ออก</button>
         </div>
       `;
     }
@@ -319,17 +259,6 @@
       window.location.reload();
     }
 
-    async function checkAuthAndRedirect() {
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (!session) {
-        alert('⚠️ กรุณาเข้าสู่ระบบก่อนเข้าใช้งานคลังโจทย์');
-        toggleModal('login');
-      } else {
-        switchView('dashboard');
-      }
-    }
-
-    // โหลดข้อมูลจริง (Stats, Contests, Ranking, Problems)
     async function fetchRealData() {
       try {
         const { count: totalCount } = await supabaseClient.from('problems').select('*', { count: 'exact', head: true });
@@ -338,34 +267,18 @@
         if (totalCount !== null) document.getElementById('statTotal').textContent = totalCount;
         if (verifiedCount !== null) document.getElementById('statVerified').textContent = verifiedCount;
 
-        const { data: probList } = await supabaseClient.from('problems').select('*').eq('is_verified', true);
-        const tableBody = document.getElementById('verifiedProblemsTable');
-        if (probList && probList.length > 0) {
-          tableBody.innerHTML = probList.map(p => `
-            <tr>
-              <td class="p-4 font-bold text-white">#PROB-${p.id} : ${p.title}</td>
-              <td class="p-4 text-emerald-400">${p.difficulty}</td>
-              <td class="p-4 text-right">
-                <button onclick="alert('กำลังเปิดหน้า Code Editor สำหรับโจทย์ข้อนี้')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-xl transition">เขียนโค้ดและส่งตรวจ</button>
-              </td>
-            </tr>
-          `).join('');
-        } else {
-          tableBody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-gray-400">ยังไม่มีโจทย์ที่ผ่านการรับรองจาก Admin ในขณะนี้</td></tr>`;
-        }
-
         const { data: rankingList } = await supabaseClient.from('profiles').select('*').order('xp', { ascending: false }).limit(5);
         const rankingBody = document.getElementById('rankingTableBody');
         if (rankingList && rankingList.length > 0) {
           rankingBody.innerHTML = rankingList.map((r, index) => `
             <tr class="hover:bg-white/5 transition">
-              <td class="p-4 font-bold text-amber-400">#${index + 1}</td>
-              <td class="p-4 font-semibold text-white">${r.display_name || 'Anonymous'}</td>
-              <td class="p-4 text-right text-indigo-300 font-bold">${r.xp || 0} XP</td>
+              <td class="p-3.5 font-bold text-amber-400">#${index + 1}</td>
+              <td class="p-3.5 font-semibold text-white">${r.display_name || 'Anonymous'}</td>
+              <td class="p-3.5 text-right text-indigo-300 font-bold">${r.xp || 0} XP</td>
             </tr>
           `).join('');
         } else {
-          rankingBody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-gray-400">ยังไม่มีข้อมูลผู้ใช้งานในระบบ Ranking</td></tr>`;
+          rankingBody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-gray-400">ยังไม่มีข้อมูล Ranking</td></tr>`;
         }
 
         const { data: contestList } = await supabaseClient.from('contests').select('*').order('created_at', { ascending: false });
@@ -373,30 +286,23 @@
         if (contestList && contestList.length > 0) {
           const activeContest = contestList[0];
           bannerContainer.innerHTML = `
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
                 <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-3 py-1 rounded-full">🟢 กำลังจัดขึ้นจริง</span>
-                <h3 class="text-xl md:text-2xl font-bold text-white mt-2 mb-2">${activeContest.title}</h3>
-                <p class="text-xs text-gray-400">${activeContest.description || 'ไม่มีรายละเอียดเพิ่มเติม'}</p>
+                <h3 class="text-lg md:text-xl font-bold text-white mt-2 mb-1">${activeContest.title}</h3>
+                <p class="text-xs text-gray-400">${activeContest.description || ''}</p>
               </div>
-              <button onclick="checkAuthAndRedirect()" class="bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold px-6 py-3 rounded-xl text-xs transition">เข้าร่วมการแข่งขัน</button>
+              <a href="problems.html" class="bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold px-5 py-2.5 rounded-xl text-xs transition">เข้าร่วมแข่งขัน</a>
             </div>
           `;
         } else {
-          bannerContainer.innerHTML = `<div class="text-center py-4 text-gray-400 text-xs"><i class="fa-solid fa-circle-info mr-1"></i> ไม่มี Contest ที่กำลังจัดอยู่ในขณะนี้</div>`;
+          bannerContainer.innerHTML = `<div class="text-center py-2 text-gray-400 text-xs"><i class="fa-solid fa-circle-info mr-1"></i> ไม่มี Contest ที่กำลังจัดอยู่ในขณะนี้</div>`;
         }
       } catch (err) {
-        console.log('Error fetching real data:', err);
+        console.log('Error fetching data:', err);
       }
     }
     fetchRealData();
-
-    function switchView(viewName) {
-      document.getElementById('view-landing').classList.add('hidden');
-      document.getElementById('view-dashboard').classList.add('hidden');
-      if (viewName === 'landing') document.getElementById('view-landing').classList.remove('hidden');
-      if (viewName === 'dashboard') document.getElementById('view-dashboard').classList.remove('hidden');
-    }
 
     let currentAuthMode = 'login';
     const modal = document.getElementById('authModal');
@@ -421,7 +327,7 @@
 
         if (mode === 'login') {
           modalTitle.textContent = 'เข้าสู่ระบบ';
-          modalSubtitle.textContent = 'ใช้ Email หรือ Username ในการเข้าสู่ระบบ';
+          modalSubtitle.textContent = 'ใช้ Email หรือ Username';
           authSubmitBtn.textContent = 'เข้าสู่ระบบ';
           usernameGroup.classList.add('hidden');
           identifierGroup.classList.remove('hidden');
@@ -429,8 +335,8 @@
           confirmPasswordGroup.classList.add('hidden');
         } else if (mode === 'register') {
           modalTitle.textContent = 'สมัครสมาชิกใหม่';
-          modalSubtitle.textContent = 'กรอกข้อมูลเพื่อสร้างบัญชีผู้ใช้งาน';
-          authSubmitBtn.textContent = 'ลงทะเบียนใช้งานระบบ';
+          modalSubtitle.textContent = 'สมัครปุ๊บ ใช้งานได้ทันที';
+          authSubmitBtn.textContent = 'ลงทะเบียนใช้งาน';
           usernameGroup.classList.remove('hidden');
           identifierGroup.classList.remove('hidden');
           identifierGroup.querySelector('label').textContent = 'อีเมล (Email)';
@@ -438,12 +344,12 @@
           confirmPasswordGroup.classList.remove('hidden');
         } else if (mode === 'changepass') {
           modalTitle.textContent = 'เปลี่ยนรหัสผ่าน';
-          modalSubtitle.textContent = 'กำหนดรหัสผ่านใหม่ของคุณ';
+          modalSubtitle.textContent = 'กำหนดรหัสผ่านใหม่';
           authSubmitBtn.textContent = 'บันทึกรหัสผ่านใหม่';
           usernameGroup.classList.add('hidden');
           identifierGroup.classList.add('hidden');
           passwordGroup.classList.remove('hidden');
-          passwordGroup.querySelector('label').textContent = 'รหัสผ่านใหม่ (New Password)';
+          passwordGroup.querySelector('label').textContent = 'รหัสผ่านใหม่';
           confirmPasswordGroup.classList.remove('hidden');
         }
 
@@ -475,7 +381,13 @@
         authMsg.textContent = 'กำลังสมัครสมาชิก...';
         authMsg.className = 'text-xs text-center text-indigo-300 font-semibold';
 
-        const { data, error } = await supabaseClient.auth.signUp({ email, password });
+        // ปิดระบบยืนยันอีเมลสมัครปุ๊บ ล็อกอิน/ใช้งานได้ทันที (Auto Confirm)
+        const { data, error } = await supabaseClient.auth.signUp({ 
+          email, 
+          password,
+          options: { data: { display_name: username } }
+        });
+
         if (error) {
           authMsg.textContent = `❌ ${error.message}`;
           authMsg.className = 'text-xs text-center text-rose-400 font-semibold';
@@ -483,9 +395,9 @@
           if (data.user) {
             await supabaseClient.from('profiles').insert([{ id: data.user.id, display_name: username, xp: 0 }]);
           }
-          authMsg.textContent = '✅ สมัครสมาชิกสำเร็จ! กรุณายืนยันตัวตนทางอีเมล';
+          authMsg.textContent = '✅ สมัครสมาชิกสำเร็จ! เข้าสู่ระบบอัตโนมัติ...';
           authMsg.className = 'text-xs text-center text-emerald-400 font-semibold';
-          setTimeout(() => toggleModal(null), 2000);
+          setTimeout(() => { toggleModal(null); window.location.reload(); }, 1200);
         }
       } else if (currentAuthMode === 'login') {
         const identifier = document.getElementById('authIdentifier').value.trim();
@@ -498,7 +410,7 @@
         if (!identifier.includes('@')) {
           const { data: profileData } = await supabaseClient.from('profiles').select('id').eq('display_name', identifier).single();
           if (!profileData) {
-            authMsg.textContent = '❌ ไม่พบชื่อผู้ใช้งานนี้ในระบบ';
+            authMsg.textContent = '❌ ไม่พบชื่อผู้ใช้งานนี้';
             authMsg.className = 'text-xs text-center text-rose-400 font-semibold';
             return;
           }
@@ -511,17 +423,14 @@
         } else {
           authMsg.textContent = '✅ เข้าสู่ระบบสำเร็จ!';
           authMsg.className = 'text-xs text-center text-emerald-400 font-semibold';
-          setTimeout(() => { 
-            toggleModal(null); 
-            window.location.reload();
-          }, 1000);
+          setTimeout(() => { toggleModal(null); window.location.reload(); }, 1000);
         }
       } else if (currentAuthMode === 'changepass') {
         const newPassword = document.getElementById('authPassword').value;
         const confirmPassword = document.getElementById('authConfirmPassword').value;
 
         if (newPassword !== confirmPassword) {
-          authMsg.textContent = '❌ รหัสผ่านใหม่ทั้งสองช่องไม่ตรงกัน';
+          authMsg.textContent = '❌ รหัสผ่านใหม่ไม่ตรงกัน';
           authMsg.className = 'text-xs text-center text-rose-400 font-semibold';
           return;
         }
