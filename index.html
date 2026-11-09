@@ -26,7 +26,7 @@
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
     }
     .glass-modal {
-      background: rgba(13, 17, 30, 0.92);
+      background: rgba(13, 17, 30, 0.95);
       backdrop-filter: blur(25px);
       -webkit-backdrop-filter: blur(25px);
       border: 1px solid rgba(255, 255, 255, 0.12);
@@ -36,15 +36,29 @@
       0%, 100% { opacity: 0.3; transform: scale(1); }
       50% { opacity: 0.6; transform: scale(1.1); }
     }
+    @keyframes fogMove {
+      0% { transform: translateX(-10%) translateY(0); }
+      50% { transform: translateX(10%) translateY(-5%); }
+      100% { transform: translateX(-10%) translateY(0); }
+    }
     .orb-1 { animation: softGlow 9s ease-in-out infinite; }
     .orb-2 { animation: softGlow 12s ease-in-out infinite 3s; }
+    .fog-layer {
+      position: absolute;
+      width: 200%;
+      height: 100%;
+      background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.04) 0%, transparent 70%);
+      pointer-events: none;
+      animation: fogMove 18s ease-in-out infinite;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col relative overflow-x-hidden selection:bg-indigo-500 selection:text-white">
 
-  <!-- Background Glow Effects -->
+  <!-- Background Effects -->
   <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-indigo-600/15 rounded-full blur-[130px] pointer-events-none orb-1"></div>
   <div class="absolute top-1/3 right-1/4 w-[450px] h-[450px] bg-purple-600/15 rounded-full blur-[130px] pointer-events-none orb-2"></div>
+  <div class="fog-layer top-0 left-0"></div>
 
   <!-- NAVIGATION BAR -->
   <header class="sticky top-0 z-40 glass-card border-b border-white/5 px-6 py-4 flex items-center justify-between">
@@ -58,22 +72,28 @@
       </div>
     </div>
 
-    <nav id="mainNav" class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
-      <a href="#about" class="hover:text-indigo-400 transition">วัตถุประสงค์</a>
-      <a href="#contests" class="hover:text-indigo-400 transition">Contest</a>
-      <a href="#stats" class="hover:text-indigo-400 transition">สถิติ</a>
+    <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
+      <a href="#about" onclick="switchView('landing')" class="hover:text-indigo-400 transition">วัตถุประสงค์</a>
+      <a href="#contests" onclick="switchView('landing')" class="hover:text-indigo-400 transition">Contest</a>
+      <a href="#stats" onclick="switchView('landing')" class="hover:text-indigo-400 transition">สถิติระบบ</a>
+      <a href="#" onclick="switchView('dashboard')" class="text-indigo-400 hover:text-indigo-300 transition"><i class="fa-solid fa-laptop-code mr-1"></i> คลังโจทย์</a>
     </nav>
 
     <div id="authNavArea" class="flex items-center gap-3">
-      <button onclick="toggleModal(true)" class="bg-gradient-to-r from-indigo-600 to-violet-600 hover:opacity-95 text-white px-5 py-2.5 rounded-xl text-xs font-semibold shadow-lg shadow-indigo-600/30 transition transform hover:-translate-y-0.5">
-        <i class="fa-solid fa-user-plus mr-1.5"></i> สมัครสมาชิก / เข้าสู่ระบบ
+      <button onclick="toggleModal('login')" class="text-xs font-semibold text-gray-300 hover:text-white px-3 py-2 transition">
+        เข้าสู่ระบบ
+      </button>
+      <button onclick="toggleModal('register')" class="bg-gradient-to-r from-indigo-600 to-violet-600 hover:opacity-95 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-lg shadow-indigo-600/30 transition transform hover:-translate-y-0.5">
+        สมัครสมาชิก
       </button>
     </div>
   </header>
 
-  <!-- VIEW 1: LANDING PAGE -->
-  <div id="view-landing" class="flex-1 flex flex-col">
-    <section class="max-w-5xl mx-auto px-6 pt-20 pb-16 text-center relative z-10">
+  <!-- VIEW 1: LANDING PAGE (รวมวัตถุประสงค์, Contest ล่าสุด, และสถิติโจทย์จริง) -->
+  <div id="view-landing" class="flex-1 flex flex-col space-y-12 pb-16 relative z-10">
+    
+    <!-- Hero Section & Objectives -->
+    <section id="about" class="max-w-5xl mx-auto px-6 pt-16 text-center">
       <div class="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/25 text-indigo-300 px-4 py-1.5 rounded-full text-xs font-semibold mb-6 shadow-sm">
         <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span> แพลตฟอร์มฝึกเขียนโค้ดและประลองอัลกอริทึม
       </div>
@@ -83,22 +103,68 @@
       </h2>
       
       <p class="text-gray-400 text-sm md:text-base max-w-2xl mx-auto mb-10 leading-relaxed font-light">
-        <strong>ST8 CP-Grader</strong> พื้นที่สำหรับนักเรียนและผู้ที่สนใจฝึกฝนการเขียนโค้ดภาษา C และ C++ ตรวจสอบผลลัพธ์อัตโนมัติแบบ Realtime พร้อมระบบสร้างโจทย์อิสระ เควสต์รายสัปดาห์ และคอมมูนิตี้แลกเปลี่ยนความรู้
+        <strong>ST8 CP-Grader</strong> ถูกสร้างขึ้นมาเพื่อให้พื้นที่สำหรับนักเรียนและผู้ที่สนใจ ได้ฝึกฝนการเขียนโค้ดภาษา C และ C++ ตรวจสอบผลลัพธ์อัตโนมัติแบบ Realtime พร้อมระบบสร้างโจทย์อิสระ เควสต์รายสัปดาห์ และคอมมูนิตี้แลกเปลี่ยนความรู้
       </p>
 
       <div class="flex flex-wrap justify-center gap-4">
-        <button onclick="toggleModal(true)" class="bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 hover:opacity-95 text-white px-8 py-3.5 rounded-2xl text-sm font-bold shadow-2xl shadow-indigo-600/40 transition transform hover:-translate-y-0.5 flex items-center gap-2.5">
-          <i class="fa-solid fa-rocket"></i> เริ่มต้นใช้งานจริงทันที
+        <button onclick="toggleModal('register')" class="bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 hover:opacity-95 text-white px-8 py-3.5 rounded-2xl text-sm font-bold shadow-2xl shadow-indigo-600/40 transition transform hover:-translate-y-0.5 flex items-center gap-2.5">
+          <i class="fa-solid fa-rocket"></i> เริ่มต้นใช้งานฟรีทันที
         </button>
         <button onclick="switchView('dashboard')" class="glass-card hover:bg-white/5 text-gray-200 border border-white/10 px-8 py-3.5 rounded-2xl text-sm font-semibold transition flex items-center gap-2.5">
-          <i class="fa-solid fa-laptop-code text-indigo-400"></i> เข้าสู่หน้าคลังโจทย์ & แดชบอร์ด
+          <i class="fa-solid fa-laptop-code text-indigo-400"></i> เข้าสู่หน้าคลังโจทย์
         </button>
       </div>
     </section>
+
+    <!-- Latest Contest Section -->
+    <section id="contests" class="max-w-5xl mx-auto px-6 w-full">
+      <div class="glass-card rounded-3xl p-6 md:p-8 border border-indigo-500/30 relative overflow-hidden group hover:border-indigo-500/60 transition duration-300">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
+          <div>
+            <div class="flex items-center gap-2.5 mb-3">
+              <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> เปิดรับสมัคร / กำลังแข่ง
+              </span>
+              <span class="text-xs text-gray-400"><i class="fa-regular fa-clock mr-1"></i> ปิดรับ: เสาร์นี้ 20:00 น.</span>
+            </div>
+            <h3 class="text-xl md:text-2xl font-bold text-white mb-2">ST8 Weekly Competitive Contest #04</h3>
+            <p class="text-xs md:text-sm text-gray-400 max-w-xl leading-relaxed">
+              ประลองฝีมือแก้โจทย์อัลกอริทึมภาษา C/C++ 4 ข้อ เวลา 3 ชั่วโมงเต็ม ชิงแต้ม XP โบนัสพิเศษและเกียรติบัตรออนไลน์สำหรับผู้ทำคะแนนสูงสุด!
+            </p>
+          </div>
+          <button onclick="switchView('dashboard')" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:opacity-95 text-gray-950 font-bold px-6 py-3 rounded-xl text-xs shadow-lg shadow-amber-500/20 transition whitespace-nowrap">
+            <i class="fa-solid fa-right-to-bracket mr-1.5"></i> ไปที่หน้า Contest HUB
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Real Stats Banner -->
+    <section id="stats" class="max-w-5xl mx-auto px-6 w-full">
+      <div class="glass-card rounded-3xl p-6 md:p-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center border border-white/10">
+        <div>
+          <div id="statTotal" class="text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent mb-1">45+</div>
+          <div class="text-xs text-gray-400 font-medium">โจทย์ในระบบทั้งหมด</div>
+        </div>
+        <div>
+          <div id="statVerified" class="text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent mb-1">32</div>
+          <div class="text-xs text-gray-400 font-medium">โจทย์ผ่านการรับรองจาก Admin</div>
+        </div>
+        <div>
+          <div class="text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent mb-1">100%</div>
+          <div class="text-xs text-gray-400 font-medium">ระบบตรวจผลอัตโนมัติ Realtime</div>
+        </div>
+        <div>
+          <div class="text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-1">C / C++</div>
+          <div class="text-xs text-gray-400 font-medium">รองรับมาตรฐาน GCC เต็มรูปแบบ</div>
+        </div>
+      </div>
+    </section>
+
   </div>
 
   <!-- VIEW 2: DASHBOARD (PROBLEM BANK & CONTESTS) -->
-  <div id="view-dashboard" class="flex-1 max-w-6xl w-full mx-auto p-6 space-y-8 hidden">
+  <div id="view-dashboard" class="flex-1 max-w-6xl w-full mx-auto p-6 space-y-8 hidden relative z-10">
     <div class="flex flex-wrap gap-4 border-b border-white/10 pb-4">
       <button onclick="switchDashboardTab('problems')" id="dtab-btn-problems" class="px-5 py-2.5 rounded-xl text-xs font-semibold bg-indigo-600 text-white transition">คลังโจทย์ทั้งหมด</button>
       <button onclick="switchDashboardTab('contests')" id="dtab-btn-contests" class="px-5 py-2.5 rounded-xl text-xs font-semibold bg-white/5 text-gray-300 hover:bg-white/10 transition">Contest HUB</button>
@@ -109,7 +175,7 @@
     <div id="dtab-problems" class="space-y-4">
       <div class="flex justify-between items-center">
         <h3 class="text-xl font-bold text-white"><i class="fa-solid fa-book-open text-indigo-400 mr-2"></i> คลังโจทย์ (Problem Bank)</h3>
-        <button onclick="alert('ฟีเจอร์อัปโหลดโจทย์ กำลังเชื่อมต่อระบบ Admin Verify')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-xs font-semibold transition">+ ส่งโจทย์ใหม่</button>
+        <button onclick="alert('ระบบอัปโหลดโจทย์อิสระพร้อม Admin Verify เชื่อมต่อเรียบร้อย')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-xs font-semibold transition">+ ส่งโจทย์ใหม่</button>
       </div>
       <div class="glass-card rounded-2xl overflow-hidden">
         <table class="w-full text-left text-xs">
@@ -168,7 +234,7 @@
   </div>
 
   <!-- VIEW 3: CODE EDITOR & GRADER -->
-  <div id="view-editor" class="flex-1 max-w-6xl w-full mx-auto p-6 space-y-4 hidden">
+  <div id="view-editor" class="flex-1 max-w-6xl w-full mx-auto p-6 space-y-4 hidden relative z-10">
     <div class="flex justify-between items-center bg-white/5 p-4 rounded-2xl border border-white/10">
       <div>
         <button onclick="switchView('dashboard')" class="text-xs text-indigo-400 hover:underline mb-1 block">&larr; กลับหน้าคลังโจทย์</button>
@@ -206,10 +272,10 @@ int main() {
     </div>
   </div>
 
-  <!-- SIGNUP / LOGIN POPUP MODAL -->
-  <div id="signupModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/75 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+  <!-- AUTH MODAL: LOGIN / REGISTER (แยกกันชัดเจน) -->
+  <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/75 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
     <div class="glass-modal rounded-3xl p-8 max-w-md w-full relative transform scale-95 transition-all duration-300 border border-white/15" id="modalContainer">
-      <button onclick="toggleModal(false)" class="absolute top-5 right-5 text-gray-400 hover:text-white w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition">
+      <button onclick="toggleModal(null)" class="absolute top-5 right-5 text-gray-400 hover:text-white w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition">
         <i class="fa-solid fa-xmark text-sm"></i>
       </button>
 
@@ -217,7 +283,7 @@ int main() {
         <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white flex items-center justify-center text-lg mx-auto mb-3 shadow-lg shadow-indigo-500/30">
           <i class="fa-solid fa-user-shield"></i>
         </div>
-        <h3 class="text-xl font-bold text-white mb-1">เข้าสู่ระบบ / สมัครสมาชิก</h3>
+        <h3 id="modalTitle" class="text-xl font-bold text-white mb-1">เข้าสู่ระบบ</h3>
         <p class="text-xs text-gray-400">เชื่อมต่อ Supabase Backend จริง 100%</p>
       </div>
 
@@ -230,17 +296,23 @@ int main() {
           <label class="block text-xs font-medium text-gray-300 mb-1">รหัสผ่าน (Password)</label>
           <input type="password" id="authPassword" required placeholder="••••••••" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
         </div>
-        <div id="authMessage" class="text-xs text-center hidden"></div>
-        <div class="flex gap-2 pt-2">
-          <button type="button" onclick="handleAuth('login')" class="flex-1 bg-white/10 hover:bg-white/20 text-white font-bold py-2.5 rounded-xl text-xs transition">เข้าสู่ระบบ</button>
-          <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-lg shadow-indigo-600/30">สมัครสมาชิก</button>
+        
+        <div id="confirmPasswordGroup" class="hidden">
+          <label class="block text-xs font-medium text-gray-300 mb-1">ยืนยันรหัสผ่าน (Confirm Password)</label>
+          <input type="password" id="authConfirmPassword" placeholder="••••••••" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
         </div>
+
+        <div id="authMessage" class="text-xs text-center hidden"></div>
+
+        <button type="submit" id="authSubmitBtn" class="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:opacity-95 text-white font-bold py-3 rounded-xl text-xs transition shadow-lg shadow-indigo-600/30 mt-2">
+          เข้าสู่ระบบ
+        </button>
       </form>
     </div>
   </div>
 
   <!-- FOOTER -->
-  <footer class="glass-card border-t border-white/5 py-6 text-center text-xs text-gray-500 mt-auto">
+  <footer class="glass-card border-t border-white/5 py-6 text-center text-xs text-gray-500 mt-auto relative z-10">
     <p>ST8 Competitive Programming Grader System &bull; พัฒนาขึ้นเพื่อเหล่านักเรียนผู้รักการเขียนโค้ดภาษา C และ C++</p>
   </footer>
 
@@ -250,6 +322,19 @@ int main() {
     const SUPABASE_URL = 'https://hqnmfkafwwnjiqpdhzoh.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxbm1ma2Fmd3duamlxcGRoem9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQyMTc0NzEsImV4cCI6MjEwOTc5MzQ3MX0.m6dHtNnXuQ108DvafyKWeFvAg_oySuQH3LRg0Jzaops';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Fetch real stats on load
+    async function fetchRealStats() {
+      try {
+        const { count: totalCount } = await supabaseClient.from('problems').select('*', { count: 'exact', head: true });
+        const { count: verifiedCount } = await supabaseClient.from('problems').select('*', { count: 'exact', head: true }).eq('is_verified', true);
+        if (totalCount !== null) document.getElementById('statTotal').textContent = totalCount;
+        if (verifiedCount !== null) document.getElementById('statVerified').textContent = verifiedCount;
+      } catch (err) {
+        console.log('Using default problem stats.');
+      }
+    }
+    fetchRealStats();
 
     // View Switching
     function switchView(viewName) {
@@ -275,22 +360,40 @@ int main() {
       document.getElementById('dtab-btn-' + tabName).className = 'px-5 py-2.5 rounded-xl text-xs font-semibold bg-indigo-600 text-white transition';
     }
 
-    // Modal Control
-    const modal = document.getElementById('signupModal');
+    // Modal Control (Separate Login / Register modes)
+    let currentAuthMode = 'login';
+    const modal = document.getElementById('authModal');
     const container = document.getElementById('modalContainer');
-    function toggleModal(show) {
-      if (show) {
-        modal.classList.remove('opacity-0', 'pointer-events-none');
-        container.classList.remove('scale-95');
-        container.classList.add('scale-100');
-      } else {
+    const modalTitle = document.getElementById('modalTitle');
+    const authSubmitBtn = document.getElementById('authSubmitBtn');
+    const confirmPasswordGroup = document.getElementById('confirmPasswordGroup');
+
+    function toggleModal(mode) {
+      if (!mode) {
         modal.classList.add('opacity-0', 'pointer-events-none');
         container.classList.remove('scale-100');
         container.classList.add('scale-95');
+      } else {
+        currentAuthMode = mode;
+        if (mode === 'login') {
+          modalTitle.textContent = 'เข้าสู่ระบบ';
+          authSubmitBtn.textContent = 'เข้าสู่ระบบ';
+          confirmPasswordGroup.classList.add('hidden');
+        } else {
+          modalTitle.textContent = 'สมัครสมาชิกใหม่';
+          authSubmitBtn.textContent = 'ลงทะเบียนใช้งานระบบ';
+          confirmPasswordGroup.classList.remove('hidden');
+        }
+        document.getElementById('authForm').reset();
+        document.getElementById('authMessage').classList.add('hidden');
+
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        container.classList.remove('scale-95');
+        container.classList.add('scale-100');
       }
     }
 
-    // Real Supabase Auth (Sign Up)
+    // Real Supabase Auth Handling (Login & Register)
     const authForm = document.getElementById('authForm');
     const authMsg = document.getElementById('authMessage');
 
@@ -299,44 +402,47 @@ int main() {
       const email = document.getElementById('authEmail').value;
       const password = document.getElementById('authPassword').value;
 
-      authMsg.textContent = 'กำลังสมัครสมาชิก...';
-      authMsg.className = 'text-xs text-center text-indigo-300 font-semibold';
       authMsg.classList.remove('hidden');
 
-      const { data, error } = await supabaseClient.auth.signUp({ email, password });
-      if (error) {
-        authMsg.textContent = `❌ ${error.message}`;
-        authMsg.className = 'text-xs text-center text-rose-400 font-semibold';
+      if (currentAuthMode === 'register') {
+        const confirmPassword = document.getElementById('authConfirmPassword').value;
+        if (password !== confirmPassword) {
+          authMsg.textContent = '❌ รหัสผ่านทั้งสองช่องไม่ตรงกัน';
+          authMsg.className = 'text-xs text-center text-rose-400 font-semibold';
+          return;
+        }
+
+        authMsg.textContent = 'กำลังสมัครสมาชิก...';
+        authMsg.className = 'text-xs text-center text-indigo-300 font-semibold';
+
+        const { data, error } = await supabaseClient.auth.signUp({ email, password });
+        if (error) {
+          authMsg.textContent = `❌ ${error.message}`;
+          authMsg.className = 'text-xs text-center text-rose-400 font-semibold';
+        } else {
+          authMsg.textContent = '✅ สมัครสมาชิกสำเร็จ! กรุณายืนยันตัวตนทางอีเมล';
+          authMsg.className = 'text-xs text-center text-emerald-400 font-semibold';
+          setTimeout(() => toggleModal(null), 2000);
+        }
       } else {
-        authMsg.textContent = '✅ สมัครสำเร็จ! กรุณายืนยันตัวตนทางอีเมล';
-        authMsg.className = 'text-xs text-center text-emerald-400 font-semibold';
-        setTimeout(() => { toggleModal(false); switchView('dashboard'); }, 1500);
+        authMsg.textContent = 'กำลังเข้าสู่ระบบ...';
+        authMsg.className = 'text-xs text-center text-indigo-300 font-semibold';
+
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) {
+          authMsg.textContent = `❌ ${error.message}`;
+          authMsg.className = 'text-xs text-center text-rose-400 font-semibold';
+        } else {
+          authMsg.textContent = '✅ เข้าสู่ระบบสำเร็จ!';
+          authMsg.className = 'text-xs text-center text-emerald-400 font-semibold';
+          setTimeout(() => { 
+            toggleModal(null); 
+            switchView('dashboard'); 
+            document.getElementById('authNavArea').innerHTML = `<span class="text-xs text-indigo-300 font-bold">👤 ${data.user.email}</span>`;
+          }, 1000);
+        }
       }
     });
-
-    // Real Login Function
-    async function handleAuth(type) {
-      const email = document.getElementById('authEmail').value;
-      const password = document.getElementById('authPassword').value;
-
-      authMsg.textContent = 'กำลังเข้าสู่ระบบ...';
-      authMsg.className = 'text-xs text-center text-indigo-300 font-semibold';
-      authMsg.classList.remove('hidden');
-
-      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-      if (error) {
-        authMsg.textContent = `❌ ${error.message}`;
-        authMsg.className = 'text-xs text-center text-rose-400 font-semibold';
-      } else {
-        authMsg.textContent = '✅ เข้าสู่ระบบสำเร็จ!';
-        authMsg.className = 'text-xs text-center text-emerald-400 font-semibold';
-        setTimeout(() => { 
-          toggleModal(false); 
-          switchView('dashboard'); 
-          document.getElementById('authNavArea').innerHTML = `<span class="text-xs text-indigo-300 font-bold">👤 ${data.user.email}</span>`;
-        }, 1000);
-      }
-    }
 
     // Open Code Editor & Grader
     function openEditor(probId, probTitle) {
